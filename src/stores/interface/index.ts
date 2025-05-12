@@ -13,7 +13,7 @@ export interface GlobalState {
   breadcrumbIcon: boolean
   // tabs: boolean
   // tabsIcon: boolean
-  // footer: boolean
+  footer: boolean
 }
 
 export interface UserState {

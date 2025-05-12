@@ -51,6 +51,10 @@ export const initDynamicRouter = async () => {
       // Hapus properti children jika ada (untuk menghindari nested routing)
       item.children && delete item.children
 
+      console.log('modules', modules)
+      console.log('/src/views' + item.component + '.vue')
+      console.log(modules['/src/views' + item.component + '.vue'])
+
       // Ubah string path component menjadi fungsi import menggunakan hasil dari import.meta.glob
       if (item.component && typeof item.component == 'string') {
         item.component = modules['/src/views' + item.component + '.vue']
