@@ -1,0 +1,5 @@
+.flx-center {
+    display: flex; /* Mengaktifkan Flexbox layout untuk elemen ini */
+    align-items: center; /* Menyusun anak-anak flex secara vertikal di tengah (cross-axis) */
+    justify-content: center; /* Menyusun anak-anak flex secara horizontal di tengah (main-axis) */
+  }
