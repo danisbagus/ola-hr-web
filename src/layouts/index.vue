@@ -12,7 +12,7 @@
           <!-- Teks nama aplikasi (data binding ke variabel `title`) -->
           <span class="logo-text">{{ title }}</span>
         </div>
-        <!-- <ToolBarLeft /> -->
+        <ToolBarLeft />
       </div>
       <div class="header-right">
         <!-- Komponen toolbar kiri (misalnya: tombol collapse menu, breadcrumb, dll) -->
@@ -67,7 +67,7 @@ import { useAuthStore } from '@/stores/modules/auth/auth.store'
 import { useGlobalStore } from '@/stores/modules/global/global.store'
 
 // layout components
-// import ToolBarLeft from '@/layouts/components/Header/ToolBarLeft.vue'
+import ToolBarLeft from '@/layouts/components/Header/ToolBarLeft.vue'
 // import ToolBarRight from '@/layouts/components/Header/ToolBarRight.vue'
 // import SubMenu from '@/layouts/components/Menu/SubMenu.vue'
 import Main from '@/layouts/components/Main/index.vue'
