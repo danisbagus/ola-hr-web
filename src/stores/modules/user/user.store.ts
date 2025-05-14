@@ -4,6 +4,11 @@ import { defineStore } from 'pinia'
 // Mengimpor tipe data `UserState` dari file interface. Ini digunakan untuk memberikan tipe pada state store.
 import type { UserState } from '@/stores/interface'
 
+import type { User } from '@/api/interface'
+
+// Mengimpor fungsi `getUserInfoApi` dari file API.
+import { getUserInfoApi, updateUserInfoApi } from '@/api/modules/user/user.api'
+
 // Mengimpor konfigurasi persist untuk Pinia, yang akan digunakan agar state store dapat disimpan secara persisten.
 import piniaPersistConfig from '@/stores/helper/persist'
 
@@ -24,7 +29,12 @@ export const useUserStore = defineStore('ola-hr-user', {
   // Di sini didefinisikan dua properti: `token` sebagai string kosong, dan `userInfo` sebagai objek dengan properti `name`.
   state: (): UserState => ({
     token: '',
-    userInfo: { name: 'Admin' }
+    userInfo: {
+      name: '',
+      email: '',
+      role: '',
+      division: ''
+    }
   }),
 
   // Getter kosong (tidak ada getter yang didefinisikan saat ini),
@@ -42,6 +52,30 @@ export const useUserStore = defineStore('ola-hr-user', {
     // Tipe parameternya diambil dari struktur `UserState['userInfo']` untuk menjaga konsistensi.
     setUserInfo(userInfo: UserState['userInfo']) {
       this.userInfo = userInfo
+    },
+
+    // Get UserInfo
+    async getUserInfo(): Promise<void> {
+      try {
+        const { data }: { data: User.ResUserInfo } = await getUserInfoApi()
+        this.userInfo = data
+      } catch (error) {
+        throw error
+      }
+    },
+
+    // Update UserInfo
+    async updateUserInfo(params: User.ReqUserInfo): Promise<void> {
+      try {
+        await updateUserInfoApi(params)
+
+        // await this.getUserInfo()
+
+        // temporary
+        this.userInfo.name = params.name
+      } catch (error) {
+        throw error
+      }
     }
   },
 

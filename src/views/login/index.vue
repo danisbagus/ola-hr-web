@@ -92,7 +92,7 @@ import { useRouter } from 'vue-router'
 
 // Tipe data untuk form login dari interface API
 import type { Login } from '@/api/interface'
-import { loginApi } from '@/api/modules/auth.api'
+import { loginApi } from '@/api/modules/auth/auth.api'
 
 // Mengimpor Pinia stores
 import { useUserStore } from '@/stores/modules/user/user.store'

@@ -24,6 +24,9 @@ export const initDynamicRouter = async () => {
   const authStore = useAuthStore()
 
   try {
+    // ✅ Ambil info user terlebih dahulu
+    await userStore.getUserInfo()
+
     // 1. Ambil daftar menu dan tombol berdasarkan permission user
     await authStore.getAuthMenuList() // Ambil daftar menu yang diizinkan
 
@@ -50,10 +53,6 @@ export const initDynamicRouter = async () => {
     authStore.flatMenuListGet.forEach(item => {
       // Hapus properti children jika ada (untuk menghindari nested routing)
       item.children && delete item.children
-
-      console.log('modules', modules)
-      console.log('/src/views' + item.component + '.vue')
-      console.log(modules['/src/views' + item.component + '.vue'])
 
       // Ubah string path component menjadi fungsi import menggunakan hasil dari import.meta.glob
       if (item.component && typeof item.component == 'string') {

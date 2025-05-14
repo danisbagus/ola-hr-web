@@ -18,7 +18,7 @@ export interface GlobalState {
 
 export interface UserState {
   token: string
-  userInfo: { name: string }
+  userInfo: { name: string; email: string; role: string; division: string }
 }
 
 export interface AuthState {

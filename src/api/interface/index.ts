@@ -8,3 +8,18 @@ export namespace Login {
     token: string
   }
 }
+
+export namespace User {
+  export interface ReqUserInfo {
+    name: string
+  }
+
+  export interface ResUserInfo {
+    id: number
+    name: string
+    email: string
+    image: string
+    role: string
+    division: string
+  }
+}

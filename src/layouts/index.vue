@@ -16,7 +16,7 @@
       </div>
       <div class="header-right">
         <!-- Komponen toolbar kiri (misalnya: tombol collapse menu, breadcrumb, dll) -->
-        <!-- <ToolBarRight /> -->
+        <ToolBarRight />
       </div>
     </el-header>
 
@@ -68,7 +68,7 @@ import { useGlobalStore } from '@/stores/modules/global/global.store'
 
 // layout components
 import ToolBarLeft from '@/layouts/components/Header/ToolBarLeft.vue'
-// import ToolBarRight from '@/layouts/components/Header/ToolBarRight.vue'
+import ToolBarRight from '@/layouts/components/Header/ToolBarRight.vue'
 // import SubMenu from '@/layouts/components/Menu/SubMenu.vue'
 import Main from '@/layouts/components/Main/index.vue'
 

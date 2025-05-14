@@ -1,0 +1,14 @@
+{
+    "code": "SUCCESS",
+    "message": "Successfully get user info",
+    "errors": null,
+    "server_time": 1746966743,
+    "data": {
+        "id": 1,
+        "name": "Jhon Doe",
+        "email": "jhon.doe@olahr",
+        "image": "https://res.cloudinary.com/matchoshop/image/upload/v1747178491/avatar-olahr.png",
+        "division": "Human Resources",
+        "role": "HR Manager"
+    }
+}
