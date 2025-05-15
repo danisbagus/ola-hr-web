@@ -8,22 +8,34 @@
     </div>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item @click="openDialog('infoRef')">
+        <el-dropdown-item @click="openDialog('userInfoRef')">
           <el-icon><User /></el-icon>User Info
         </el-dropdown-item>
         <el-dropdown-item @click="openDialog('passwordRef')">
           <el-icon><Edit /></el-icon>Change Password
         </el-dropdown-item>
-        <el-dropdown-item divided @click="logout">
+        <el-dropdown-item divided @click="logoutConfirmVisible = true">
           <el-icon><SwitchButton /></el-icon>Logout
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>
   </el-dropdown>
   <!-- infoDialog -->
-  <UserInfoDialog ref="infoRef"></UserInfoDialog>
+  <UserInfoDialog ref="userInfoRef"></UserInfoDialog>
   <!-- passwordDialog -->
   <PasswordDialog ref="passwordRef"></PasswordDialog>
+  <!-- logoutConfirmDialog -->
+  <el-dialog
+    v-model="logoutConfirmVisible"
+    title="Do you want to logout?"
+    width="500px"
+    @close="logoutConfirmVisible = false"
+  >
+    <template #footer>
+      <el-button @click="logoutConfirmVisible = false">No</el-button>
+      <el-button type="warning" @click="handleLogout">Yes, Logout</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -31,36 +43,40 @@ import { ref } from 'vue'
 import { LOGIN_URL } from '@/config'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/modules/user/user.store'
-import { ElMessageBox, ElMessage } from 'element-plus'
+import { ElNotification } from 'element-plus'
 import UserInfoDialog from './UserInfoDialog.vue'
 import PasswordDialog from './PasswordDialog.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
 
-// 退出登录
-const logout = () => {
-  ElMessageBox.confirm('您是否确认退出登录?', '温馨提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(async () => {
-    // 1.清除 Token
-    userStore.setToken('')
+const logoutConfirmVisible = ref(false)
 
-    // 2.重定向到登陆页
-    router.replace(LOGIN_URL)
-    ElMessage.success('退出登录成功！')
-  })
+// 退出登录
+const handleLogout = () => {
+  // Clear Token
+  userStore.setToken('')
+  // Redirect to Login Page
+  router.replace(LOGIN_URL)
+  // Show Notification
+  ElNotification({ title: 'Successfully Logout', type: 'success' })
+  // Close Dialog
+  logoutConfirmVisible.value = false
 }
 
-// 打开修改密码和个人信息弹窗
-const infoRef = ref<InstanceType<typeof InfoDialog> | null>(null)
+// Open Dialog to Change Password or User Info
+const userInfoRef = ref<InstanceType<typeof UserInfoDialog> | null>(null)
 const passwordRef = ref<InstanceType<typeof PasswordDialog> | null>(null)
 const openDialog = (ref: string) => {
-  if (ref == 'infoRef') infoRef.value?.openDialog()
+  if (ref == 'userInfoRef') userInfoRef.value?.openDialog()
   if (ref == 'passwordRef') passwordRef.value?.openDialog()
 }
+
+// [v] templating
+// [v] wording
+// [v] styling
+// [v] function
+// integration
 </script>
 
 <style scoped lang="scss">

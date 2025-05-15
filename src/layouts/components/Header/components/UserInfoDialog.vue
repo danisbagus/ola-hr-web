@@ -46,7 +46,7 @@
       <span>Are you sure you want to submit the changes?</span>
       <template #footer>
         <el-button @click="submitConfirmVisible = false">No</el-button>
-        <el-button type="primary" @click="confirmSubmit">Yes, Submit</el-button>
+        <el-button type="primary" :loading="loading" @click="confirmSubmit">Yes, Submit</el-button>
       </template>
     </el-dialog>
   </el-dialog>
@@ -61,6 +61,7 @@ import { ElNotification } from 'element-plus'
 const dialogVisible = ref(false)
 const cancelConfirmVisible = ref(false)
 const submitConfirmVisible = ref(false)
+const loading = ref(false)
 
 const userStore = useUserStore()
 const userInfo = userStore.userInfo
@@ -93,16 +94,24 @@ const handleSubmit = () => {
 
 const confirmSubmit = async () => {
   try {
+    loading.value = true
     await userStore.updateUserInfo(form)
     ElNotification({ title: 'Successfully Update User Information', type: 'success' })
     submitConfirmVisible.value = true
   } catch (error) {
     ElNotification({ title: 'Failed Update User Information', type: 'error' })
+  } finally {
+    loading.value = false
+    submitConfirmVisible.value = false
+    dialogVisible.value = false
   }
-
-  submitConfirmVisible.value = false
-  dialogVisible.value = false
 }
 
 defineExpose({ openDialog })
+
+// [v] templating
+// [v] wording
+// [v] styling
+// [v] function
+// integration
 </script>

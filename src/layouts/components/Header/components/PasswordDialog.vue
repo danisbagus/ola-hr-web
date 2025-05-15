@@ -139,4 +139,10 @@ const confirmSubmit = async () => {
 
 // Ekspor agar parent bisa buka dialog
 defineExpose({ openDialog })
+
+// [v] templating
+// [v] wording
+// [v] styling
+// [v] function
+// integration
 </script>
