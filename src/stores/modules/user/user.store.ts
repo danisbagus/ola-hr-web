@@ -76,6 +76,15 @@ export const useUserStore = defineStore('ola-hr-user', {
       } catch (error) {
         throw error
       }
+    },
+
+    // Update Password
+    async updatePassword(params: User.ReqUpdatePassword): Promise<void> {
+      try {
+        // await updatePasswordApi(params)
+      } catch (error) {
+        throw error
+      }
     }
   },
 

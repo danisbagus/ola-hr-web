@@ -22,4 +22,10 @@ export namespace User {
     role: string
     division: string
   }
+
+  export interface ReqUpdatePassword {
+    currentPassword: string
+    newPassword: string
+    confirmPassword: string
+  }
 }
