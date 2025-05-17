@@ -12,9 +12,9 @@ import router from '@/router/index.ts' // Router untuk navigasi antar halaman
 import pinia from '@/stores' // Pinia store (state management Vue)
 
 // Gaya & Aset Kustom
-import './style.css' // Gaya umum proyek
 import '@/styles/common.scss' // SCSS umum untuk konsistensi UI
 import '@/styles/element.scss' // Kustomisasi gaya untuk komponen Element Plus
+import '@/styles/variable.scss' // Variabel CSS kustom
 import '@/assets/iconfont/iconfont.scss' // SCSS untuk font ikon khusus
 
 // Inisialisasi Aplikasi

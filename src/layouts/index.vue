@@ -25,7 +25,7 @@
       <!-- Sidebar kiri (navigasi menu) -->
       <el-aside>
         <!-- Box pembungkus sidebar dengan lebar dinamis berdasarkan `isCollapse` -->
-        <div class="aside-box" :style="{ width: isCollapse ? '65px' : '210px' }">
+        <div class="aside-box" :style="{ width: isCollapse ? '65px' : '240px' }">
           <!-- Scrollbar vertikal untuk sidebar menu -->
           <el-scrollbar>
             <!-- Komponen menu dari Element Plus -->
@@ -43,7 +43,7 @@
               <!--collapse-transition: Nonaktifkan transisi saat collapse -->
 
               <!-- Komponen submenu, menerima prop daftar menu -->
-              <!-- <SubMenu :menu-list="menuList" /> -->
+              <SubMenu :menu-list="menuList" />
             </el-menu>
           </el-scrollbar>
         </div>
@@ -69,7 +69,7 @@ import { useGlobalStore } from '@/stores/modules/global/global.store'
 // layout components
 import ToolBarLeft from '@/layouts/components/Header/ToolBarLeft.vue'
 import ToolBarRight from '@/layouts/components/Header/ToolBarRight.vue'
-// import SubMenu from '@/layouts/components/Menu/SubMenu.vue'
+import SubMenu from '@/layouts/components/Menu/SubMenu.vue'
 import Main from '@/layouts/components/Main/index.vue'
 
 // environment variable

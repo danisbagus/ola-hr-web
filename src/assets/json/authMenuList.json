@@ -14,6 +14,64 @@
         "isAffix": true,
         "isKeepAlive": true
       }
+    },
+    {
+      "path": "/organization",
+      "name": "organization",
+      "redirect": "/organization/employee-management",
+      "meta": {
+        "icon": "OfficeBuilding",
+        "title": "Organization",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/organization/employee-management",
+          "name": "employeeManagement",
+          "component": "/organization/employee-management/index",
+          "meta": {
+            "icon": "User",
+            "title": "Employee Management",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "organization/division-management",
+          "name": "divisionManagement",
+          "component": "/organization/division-management/index",
+          "meta": {
+            "icon": "School",
+            "title": "Division Management",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path" : "/organization/role-management",
+          "name": "roleManagement",
+          "component": "/organization/role-management/index",
+          "meta": {
+            "icon": "Lock",
+            "title": "Role Management",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
     }
   ],
   "msg": "SUCCESS"
