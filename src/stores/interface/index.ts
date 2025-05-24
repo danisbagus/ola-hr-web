@@ -45,3 +45,13 @@ export interface TabsState {
 export interface KeepAliveState {
   keepAliveName: string[]
 }
+
+export interface OptionItem {
+  label: string
+  value: string | number | boolean
+  disabled?: boolean
+}
+
+export interface EnumState {
+  generalStatusOptions: OptionItem[]
+}
