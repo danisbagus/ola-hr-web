@@ -42,20 +42,21 @@
 import { ref } from 'vue'
 import { LOGIN_URL } from '@/config'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/modules/user/user.store'
+import { useUser } from '@/modules/user/user.hook'
 import { ElNotification } from 'element-plus'
 import UserInfoDialog from './UserInfoDialog.vue'
 import PasswordDialog from './PasswordDialog.vue'
 
 const router = useRouter()
-const userStore = useUserStore()
+
+const { setToken } = useUser()
 
 const logoutConfirmVisible = ref(false)
 
 // 退出登录
 const handleLogout = () => {
   // Clear Token
-  userStore.setToken('')
+  setToken('')
   // Redirect to Login Page
   router.replace(LOGIN_URL)
   // Show Notification
@@ -71,12 +72,6 @@ const openDialog = (ref: string) => {
   if (ref == 'userInfoRef') userInfoRef.value?.openDialog()
   if (ref == 'passwordRef') passwordRef.value?.openDialog()
 }
-
-// [v] templating
-// [v] wording
-// [v] styling
-// [v] function
-// integration
 </script>
 
 <style scoped lang="scss">

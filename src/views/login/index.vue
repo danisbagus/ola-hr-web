@@ -119,6 +119,9 @@ import { ElNotification } from 'element-plus'
 import { useAuth } from '@/modules/auth/auth.hook'
 const { login: loginApi, loginForm, isLoadingLogin } = useAuth()
 
+import { useUser } from '@/modules/user/user.hook'
+const { getUserInfo } = useUser()
+
 // Store inisialisasi
 const tabsStore = useTabsStore()
 const keepAliveStore = useKeepAliveStore()
@@ -154,6 +157,8 @@ const login = (formEl: FormInstance | undefined) => {
       // Inisialisasi routing dinamis berdasarkan hak akses
       await initDynamicRouter()
 
+      // Ambil info user terlebih dahulu
+      await getUserInfo()
       // Bersihkan tab & keep-alive store (reset state UI)
       tabsStore.setTabs([])
       keepAliveStore.setKeepAliveName([])

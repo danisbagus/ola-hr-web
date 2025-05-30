@@ -21,11 +21,10 @@ import { checkStatus } from '@/lib/http/utils/checkStatus'
 // Import class untuk membatalkan request yang sama
 import { AxiosCanceler } from '@/lib/http/utils/axiosCancel'
 
-// Import store user (misalnya Pinia)
-import { useUserStore } from '@/stores/modules/user/user.store'
-
 // Import router untuk redirect
 import router from '@/router'
+
+import { useUser } from '@/modules/user/user.hook'
 
 // Konfigurasi default untuk axios
 const config = {
@@ -48,7 +47,7 @@ class RequestHttp {
     // Interceptor untuk request (sebelum request dikirim ke server)
     this.service.interceptors.request.use(
       (config: CustomAxiosRequestConfig) => {
-        const userStore = useUserStore()
+        const { token } = useUser()
 
         // Set default untuk cancel jika belum ditentukan
         config.cancel ??= true
@@ -62,7 +61,7 @@ class RequestHttp {
 
         // Tambahkan token dari user store ke header
         if (config.headers && typeof config.headers.set === 'function') {
-          config.headers.set('Authorization', 'Bearer ' + userStore.token)
+          config.headers.set('Authorization', 'Bearer ' + token)
         }
 
         return config
@@ -76,7 +75,7 @@ class RequestHttp {
     this.service.interceptors.response.use(
       (response: AxiosResponse & { config: CustomAxiosRequestConfig }) => {
         const { data, config } = response
-        const userStore = useUserStore()
+        const { setToken } = useUser()
 
         // Hapus request dari daftar pending
         axiosCanceler.removePending(config)
@@ -86,7 +85,7 @@ class RequestHttp {
 
         // Jika token expired, redirect ke login
         if (data.code == ResultEnum.UNAUTHORIZED) {
-          userStore.setToken('')
+          setToken('')
           router.replace(LOGIN_URL)
           ElNotification({ title: 'Token expired', type: 'error', message: data.message })
           return Promise.reject(data)

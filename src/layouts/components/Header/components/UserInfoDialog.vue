@@ -53,22 +53,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { useUserStore } from '@/stores/modules/user/user.store'
-import type { User } from '@/api/interface'
+import { ref } from 'vue'
 import { ElNotification } from 'element-plus'
+import { useUser } from '@/modules/user/user.hook'
 
 const dialogVisible = ref(false)
 const cancelConfirmVisible = ref(false)
 const submitConfirmVisible = ref(false)
-const loading = ref(false)
 
-const userStore = useUserStore()
-const userInfo = userStore.userInfo
-
-const form = reactive<User.ReqUserInfo>({
-  name: ''
-})
+const {
+  userInfo,
+  updateUserInfoForm: form,
+  updateUserInfo,
+  isLoadingUpdateUserInfo: loading
+} = useUser()
 
 const openDialog = () => {
   dialogVisible.value = true
@@ -91,27 +89,21 @@ const confirmCancel = () => {
 const handleSubmit = () => {
   submitConfirmVisible.value = true
 }
-
 const confirmSubmit = async () => {
-  try {
-    loading.value = true
-    await userStore.updateUserInfo(form)
+  const result = await updateUserInfo()
+
+  if (result.success) {
     ElNotification({ title: 'Successfully Update User Information', type: 'success' })
     submitConfirmVisible.value = true
-  } catch (error) {
-    ElNotification({ title: 'Failed Update User Information', type: 'error' })
-  } finally {
-    loading.value = false
-    submitConfirmVisible.value = false
     dialogVisible.value = false
+  } else {
+    ElNotification({
+      title: 'Failed Update User Information',
+      type: 'error',
+      message: result.errorMessage
+    })
   }
 }
 
 defineExpose({ openDialog })
-
-// [v] templating
-// [v] wording
-// [v] styling
-// [v] function
-// integration
 </script>

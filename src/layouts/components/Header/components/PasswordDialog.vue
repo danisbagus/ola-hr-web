@@ -51,27 +51,18 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { useUserStore } from '@/stores/modules/user/user.store'
-import type { User } from '@/api/interface'
 import { ElNotification, ElForm } from 'element-plus'
+import { useUser } from '@/modules/user/user.hook'
 
 // State
 const dialogVisible = ref(false)
 const cancelConfirmVisible = ref(false)
 const submitConfirmVisible = ref(false)
-const loading = ref(false)
 
 type FormInstance = InstanceType<typeof ElForm>
 const formRef = ref<FormInstance>()
 
-const userStore = useUserStore()
-
-// Form model
-const form = reactive<User.ReqUpdatePassword>({
-  currentPassword: '',
-  newPassword: '',
-  confirmPassword: ''
-})
+const { isLoadingUpdatePassword: loading, updatePasswordForm: form, updatePassword } = useUser()
 
 // Validasi
 const rules = reactive({
@@ -123,18 +114,17 @@ const handleSubmit = () => {
 }
 
 const confirmSubmit = async () => {
-  try {
-    loading.value = true
-    await userStore.updatePassword(form)
+  const result = await updatePassword()
+
+  if (result.success) {
     ElNotification({ title: 'Successfully Change Password', type: 'success' })
     submitConfirmVisible.value = true
-  } catch (error) {
-    ElNotification({ title: 'Failed Change Password', type: 'error' })
-  } finally {
-    loading.value = false
-    submitConfirmVisible.value = false
-    dialogVisible.value = false
+  } else {
+    ElNotification({ title: 'Failed Change Password', type: 'error', message: result.errorMessage })
   }
+
+  submitConfirmVisible.value = false
+  dialogVisible.value = false
 }
 
 // Ekspor agar parent bisa buka dialog

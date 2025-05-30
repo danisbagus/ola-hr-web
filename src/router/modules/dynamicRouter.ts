@@ -11,8 +11,9 @@ import type { RouteRecordRaw } from 'vue-router'
 import { ElNotification } from 'element-plus'
 
 // Store untuk informasi user dan autentikasi
-import { useUserStore } from '@/stores/modules/user/user.store'
 import { useAuthStore } from '@/stores/modules/auth/auth.store'
+
+import { useUser } from '@/modules/user/user.hook'
 
 // Impor dinamis semua file .vue di dalam folder views
 const modules = import.meta.glob('@/views/**/*.vue')
@@ -20,13 +21,10 @@ const modules = import.meta.glob('@/views/**/*.vue')
 // Inisialisasi routing dinamis berdasarkan menu dan hak akses user
 export const initDynamicRouter = async () => {
   // Inisialisasi store
-  const userStore = useUserStore()
   const authStore = useAuthStore()
+  const { setToken } = useUser()
 
   try {
-    // ✅ Ambil info user terlebih dahulu
-    await userStore.getUserInfo()
-
     // 1. Ambil daftar menu dan tombol berdasarkan permission user
     await authStore.getAuthMenuList() // Ambil daftar menu yang diizinkan
 
@@ -42,7 +40,7 @@ export const initDynamicRouter = async () => {
       })
 
       // Hapus token (logout) dan arahkan ke halaman login
-      userStore.setToken('')
+      setToken('')
       router.replace(LOGIN_URL)
 
       // Tolak Promise dan hentikan eksekusi
@@ -70,7 +68,7 @@ export const initDynamicRouter = async () => {
     })
   } catch (error) {
     // Tangani error saat mengambil data permission
-    userStore.setToken('') // Reset token
+    setToken('') // Reset token
     router.replace(LOGIN_URL) // Redirect ke login
     return Promise.reject(error) // Kembalikan error
   }

@@ -4,28 +4,19 @@
       <!-- <Message id="message" /> -->
     </div>
     <div class="user-info">
-      <span class="username">{{ name }}</span>
-      <span class="role">{{ role }}</span>
+      <span class="username">{{ userInfo.name }}</span>
+      <span class="role">{{ userInfo.role }}</span>
     </div>
     <Avatar />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useUserStore } from '@/stores/modules/user/user.store'
 // import Message from './components/Message.vue'
 import Avatar from './components/Avatar.vue'
+import { useUser } from '@/modules/user/user.hook'
 
-const userStore = useUserStore()
-const name = computed(() => userStore.userInfo.name)
-const role = computed(() => userStore.userInfo.role)
-
-// [v] templating
-// [v] wording
-// [v] styling
-// [v] function
-// integration
+const { userInfo } = useUser()
 </script>
 
 <style scoped lang="scss">

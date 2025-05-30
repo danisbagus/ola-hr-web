@@ -16,11 +16,6 @@ export interface GlobalState {
   footer: boolean
 }
 
-export interface UserState {
-  token: string
-  userInfo: { name: string; email: string; role: string; division: string }
-}
-
 export interface AuthState {
   routeName: string
   authButtonList: {
