@@ -16,10 +16,16 @@
         </div>
 
         <!-- Form login menggunakan Element Plus -->
-        <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large">
+        <el-form
+          ref="loginFormRef"
+          :model="loginForm"
+          :rules="loginRules"
+          size="large"
+          autocomplete="on"
+        >
           <!-- Input Email -->
           <el-form-item prop="email">
-            <el-input v-model="loginForm.email" placeholder="Email">
+            <el-input v-model="loginForm.email" autocomplete="email" placeholder="Email">
               <template #prefix>
                 <el-icon class="el-input__icon">
                   <user />
@@ -36,7 +42,7 @@
               type="password"
               placeholder="password"
               show-password
-              autocomplete="new-password"
+              autocomplete="current-password"
             >
               <template #prefix>
                 <el-icon class="el-input__icon">
@@ -61,7 +67,7 @@
             round
             size="large"
             type="primary"
-            :loading="loading"
+            :loading="isLoadingLogin"
             @click="login(loginFormRef)"
           >
             Login
@@ -90,12 +96,7 @@
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 
-// Tipe data untuk form login dari interface API
-import type { Login } from '@/api/interface'
-import { loginApi } from '@/api/modules/auth/auth.api'
-
 // Mengimpor Pinia stores
-import { useUserStore } from '@/stores/modules/user/user.store'
 import { useTabsStore } from '@/stores/modules/tabs/tabs.store'
 import { useKeepAliveStore } from '@/stores/modules/keepAlive/keepAlive.store'
 
@@ -114,8 +115,11 @@ import { HOME_URL } from '@/config'
 // Notifikasi UI
 import { ElNotification } from 'element-plus'
 
+// Hook untuk autentikasi
+import { useAuth } from '@/modules/auth/auth.hook'
+const { login: loginApi, loginForm, isLoadingLogin } = useAuth()
+
 // Store inisialisasi
-const userStore = useUserStore()
 const tabsStore = useTabsStore()
 const keepAliveStore = useKeepAliveStore()
 
@@ -138,15 +142,6 @@ const loginRules = reactive({
   password: [{ required: true, message: 'Please input password', trigger: 'blur' }]
 })
 
-// Loading state tombol login
-const loading = ref(false)
-
-// Data form login (email & password)
-const loginForm = reactive<Login.ReqLoginForm>({
-  email: '',
-  password: ''
-})
-
 // Fungsi utama login
 const login = (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -154,33 +149,22 @@ const login = (formEl: FormInstance | undefined) => {
   // Validasi form
   formEl.validate(async valid => {
     if (!valid) return
-    loading.value = true
-    try {
-      // 1. Eksekusi API login
-      const { data } = await loginApi(loginForm)
-      userStore.setToken(data.token) // Simpan token ke store
-
-      // 2. Inisialisasi routing dinamis berdasarkan hak akses
+    const result = await loginApi()
+    if (result.success) {
+      // Inisialisasi routing dinamis berdasarkan hak akses
       await initDynamicRouter()
 
-      // 3. Bersihkan tab & keep-alive store (reset state UI)
+      // Bersihkan tab & keep-alive store (reset state UI)
       tabsStore.setTabs([])
       keepAliveStore.setKeepAliveName([])
 
-      // 4. Arahkan user ke halaman utama (HOME_URL)
+      // Arahkan user ke halaman utama (HOME_URL)
       router.push(HOME_URL)
 
-      // 5. Tampilkan notifikasi berhasil login
-      ElNotification({
-        title: 'Successfully Logged In',
-        message: 'Welcome back to your account!',
-        type: 'success',
-        duration: 5000,
-        position: 'top-right',
-        customClass: 'login-notification'
-      })
-    } finally {
-      loading.value = false // Reset tombol loading
+      // Tampilkan notifikasi
+      ElNotification({ title: 'Successfully Logged In', type: 'success' })
+    } else {
+      ElNotification({ title: 'Failed Login', type: 'error', message: result.errorMessage })
     }
   })
 }
@@ -198,7 +182,7 @@ onMounted(() => {
     // untuk memastikan bahwa tombol yang ditekan adalah tombol Enter, baik dari keyboard utama maupun keypad numerik
     if (e.code === 'Enter' || e.code === 'enter' || e.code === 'NumpadEnter') {
       // Jika tombol Enter ditekan dan tombol loading belum aktif, jalankan fungsi login
-      if (loading.value) return
+      if (isLoadingLogin.value) return
       login(loginFormRef.value)
     }
   }
