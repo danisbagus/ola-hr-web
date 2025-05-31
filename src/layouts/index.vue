@@ -33,7 +33,7 @@
               :router="false"
               :default-active="activeMenu"
               :collapse="isCollapse"
-              :unique-opened="accordion"
+              :unique-opened="true"
               :collapse-transition="false"
             >
               <!--router: Menu tidak otomatis mengarahkan berdasarkan route -->
@@ -43,7 +43,7 @@
               <!--collapse-transition: Nonaktifkan transisi saat collapse -->
 
               <!-- Komponen submenu, menerima prop daftar menu -->
-              <SubMenu :menu-list="menuList" />
+              <SubMenu :menu-list="showMenuList" />
             </el-menu>
           </el-scrollbar>
         </div>
@@ -63,8 +63,8 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 // stores / state management
-import { useAuthStore } from '@/stores/modules/auth/auth.store'
-import { useGlobalStore } from '@/stores/modules/global/global.store'
+import { useGlobal } from '@/modules/global/global.hook'
+import { useAuth } from '@/modules/auth/auth.hook'
 
 // layout components
 import ToolBarLeft from '@/layouts/components/Header/ToolBarLeft.vue'
@@ -77,13 +77,11 @@ const title = import.meta.env.VITE_GLOB_APP_TITLE
 
 // reactive state
 const route = useRoute()
-const authStore = useAuthStore()
-const globalStore = useGlobalStore()
+
+const { showMenuList } = useAuth()
+const { isCollapse } = useGlobal()
 
 // computed
-const accordion = computed(() => globalStore.accordion)
-const isCollapse = computed(() => globalStore.isCollapse)
-const menuList = computed(() => authStore.showMenuListGet)
 const activeMenu = computed(
   () => (route.meta.activeMenu ? route.meta.activeMenu : route.path) as string
 )

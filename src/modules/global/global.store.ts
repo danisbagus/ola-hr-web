@@ -1,15 +1,10 @@
 import { defineStore } from 'pinia'
-import type { GlobalState } from '@/stores/interface'
-import { DEFAULT_PRIMARY } from '@/config'
+import type { GlobalState } from '@/modules/global/global.types'
 import piniaPersistConfig from '@/stores/helper/persist'
 
 export const useGlobalStore = defineStore('ola-hr-global', {
   state: (): GlobalState => ({
-    isCollapse: false,
-    accordion: true,
-    breadcrumb: true,
-    breadcrumbIcon: true,
-    footer: true
+    isCollapse: false
   }),
   getters: {},
   actions: {

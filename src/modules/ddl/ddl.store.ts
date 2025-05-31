@@ -5,7 +5,11 @@ import type { OptionItem } from '@/shared/types/enum'
 export const useDdlStore = defineStore('ola-hr-ddl', {
   state: (): DdlState => ({
     divisionDdl: [],
-    roleDdl: []
+    roleDdl: [],
+    generalStatus: [
+      { label: 'Active', value: true, disabled: false },
+      { label: 'Inactive', value: false, disabled: false }
+    ]
   }),
   getters: {},
   actions: {

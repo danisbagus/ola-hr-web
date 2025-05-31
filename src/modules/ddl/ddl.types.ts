@@ -4,6 +4,7 @@ import type { OptionItem } from '@/shared/types/enum'
 export interface DdlState {
   divisionDdl: OptionItem[]
   roleDdl: OptionItem[]
+  generalStatus: OptionItem[]
 }
 
 export interface ReqDdlParams {

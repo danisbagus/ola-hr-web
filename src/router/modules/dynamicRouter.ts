@@ -10,10 +10,8 @@ import type { RouteRecordRaw } from 'vue-router'
 // Komponen notifikasi dari Element Plus
 import { ElNotification } from 'element-plus'
 
-// Store untuk informasi user dan autentikasi
-import { useAuthStore } from '@/stores/modules/auth/auth.store'
-
 import { useUser } from '@/modules/user/user.hook'
+import { useAuth } from '@/modules/auth/auth.hook'
 
 // Impor dinamis semua file .vue di dalam folder views
 const modules = import.meta.glob('@/views/**/*.vue')
@@ -21,15 +19,17 @@ const modules = import.meta.glob('@/views/**/*.vue')
 // Inisialisasi routing dinamis berdasarkan menu dan hak akses user
 export const initDynamicRouter = async () => {
   // Inisialisasi store
-  const authStore = useAuthStore()
   const { setToken } = useUser()
+  const { getAuthMenuList, authMenuList, flatMenuList } = useAuth()
 
   try {
     // 1. Ambil daftar menu dan tombol berdasarkan permission user
-    await authStore.getAuthMenuList() // Ambil daftar menu yang diizinkan
+    // await authStore.getAuthMenuList() // Ambil daftar menu yang diizinkan
+
+    await getAuthMenuList()
 
     // 2. Cek apakah user memiliki hak akses menu
-    if (!authStore.authMenuListGet.length) {
+    if (!authMenuList.value.length) {
       // Tampilkan notifikasi peringatan
       ElNotification({
         title: 'No Permission', // "Tidak Ada Akses"
@@ -48,7 +48,7 @@ export const initDynamicRouter = async () => {
     }
 
     // 3. Iterasi dan tambahkan routing dinamis berdasarkan data dari backend
-    authStore.flatMenuListGet.forEach(item => {
+    flatMenuList.value.forEach(item => {
       // Hapus properti children jika ada (untuk menghindari nested routing)
       item.children && delete item.children
 

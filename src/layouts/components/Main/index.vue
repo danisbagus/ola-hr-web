@@ -3,56 +3,52 @@
   <el-main>
     <!-- router-view menampilkan komponen berdasarkan rute saat ini -->
     <router-view v-slot="{ Component, route }">
-      <!-- Transition untuk efek animasi saat halaman berubah -->
-      <transition appear name="fade-transform" mode="out-in">
-        <!-- Komponen yang dibungkus keep-alive untuk cache halaman tertentu -->
-        <keep-alive :include="keepAliveName">
-          <component
-            :is="createComponentWrapper(Component, route)"
-            v-if="isRouterShow"
-            :key="route.fullPath"
-          />
-        </keep-alive>
-      </transition>
+      <!-- todo: Transition untuk efek animasi saat halaman berubah -->
+      <!-- <transition appear name="fade-transform" > -->
+      <!-- todo: Komponen yang dibungkus keep-alive untuk cache halaman tertentu -->
+      <!-- <keep-alive :include="keepAliveName"> -->
+      <component
+        :is="createComponentWrapper(Component, route)"
+        v-show="isRouterShow"
+        :key="route.fullPath"
+      />
+      <!-- </keep-alive> -->
+      <!-- </transition> -->
     </router-view>
   </el-main>
 
   <!-- Footer akan muncul hanya jika nilai 'footer' adalah true -->
-  <el-footer v-show="footer">
+  <el-footer>
     <Footer />
   </el-footer>
+  <!-- component: Ini adalah komponen dinamis bawaan Vue. Digunakan untuk merender komponen berdasarkan nilai dari prop is -->
+  <!--is: adalah atribut binding (v-bind:is) -->
+  <!--key: Memberikan key unik untuk setiap instance komponen berdasarkan rute saat ini-->
 </template>
 
 <script setup lang="ts">
 // Import reactive utilities dari Vue
 import { ref, onBeforeUnmount, provide, h } from 'vue'
 
-// Import untuk mengubah state Pinia menjadi reactive references
-import { storeToRefs } from 'pinia'
-
 // Import debounce function dari VueUse (mencegah pemanggilan berulang-ulang dalam waktu singkat)
 import { useDebounceFn } from '@vueuse/core'
 
-// Import global store yang berisi state umum aplikasi (layout, collapse, dll)
-import { useGlobalStore } from '@/stores/modules/global/global.store'
+import { useGlobal } from '@/modules/global/global.hook'
 
 // Import store yang berfungsi untuk menyimpan daftar komponen yang perlu di-*keep-alive*
-import { useKeepAliveStore } from '@/stores/modules/keepAlive/keepAlive.store'
+// import { useKeepAliveStore } from '@/stores/modules/keepAlive/keepAlive.store'
 
 // Import komponen Footer untuk digunakan di bagian layout bawah
 import Footer from '@/layouts/components/Footer/index.vue'
 
-// Inisialisasi global store
-const globalStore = useGlobalStore()
-
 // Ambil state reactive dari global store
-const { isCollapse, footer } = storeToRefs(globalStore)
+const { isCollapse, toggleCollapseWithParam } = useGlobal()
 
 // Inisialisasi store untuk fitur keep-alive
-const keepAliveStore = useKeepAliveStore()
+// const keepAliveStore = useKeepAliveStore()
 
 // Ambil daftar nama komponen yang perlu disimpan (cached)
-const { keepAliveName } = storeToRefs(keepAliveStore)
+// const { keepAliveName } = storeToRefs(keepAliveStore)
 
 // Reactive state untuk kontrol visibilitas router-view
 const isRouterShow = ref(true)
@@ -97,12 +93,12 @@ const listeningWindow = useDebounceFn(() => {
 
   // Jika layar kurang dari 1200px dan sidebar belum collapse, set collapse = true
   if (!isCollapse.value && screenWidth.value < 1200) {
-    globalStore.setGlobalState('isCollapse', true)
+    toggleCollapseWithParam(true)
   }
 
   // Jika layar lebih dari 1200px dan sidebar sedang collapse, buka kembali
   if (isCollapse.value && screenWidth.value > 1200) {
-    globalStore.setGlobalState('isCollapse', false)
+    toggleCollapseWithParam(false)
   }
 }, 100) // Delay selama 100ms agar tidak terlalu sering dipanggil
 // Tambahkan event listener untuk resize window

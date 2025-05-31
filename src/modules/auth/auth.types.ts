@@ -1,7 +1,6 @@
 export interface AuthState {
   routeName: string
   authMenuList: Menu.MenuOptions[]
-  loginParams: ReqLoginParams
 }
 
 export interface ReqLoginParams {

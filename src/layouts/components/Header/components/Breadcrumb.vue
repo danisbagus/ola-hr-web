@@ -1,6 +1,7 @@
 <template>
   <!-- Container breadcrumb, menambahkan class 'no-icon' jika breadcrumbIcon di globalStore = false -->
-  <div :class="['breadcrumb-box mask-image', !globalStore.breadcrumbIcon && 'no-icon']">
+  <!-- <div :class="['breadcrumb-box mask-image', !globalStore.breadcrumbIcon && 'no-icon']"> -->
+  <div class="breadcrumb-box mask-image no-icon">
     <!-- Komponen breadcrumb dari Element Plus, gunakan ikon panah kanan sebagai separator -->
     <el-breadcrumb :separator-icon="ArrowRight">
       <!-- Transisi animasi saat breadcrumb berubah -->
@@ -16,10 +17,9 @@
             @click="onBreadcrumbClick(item, index)"
           >
             <!-- Tampilkan ikon jika tersedia dan opsi global breadcrumbIcon = true -->
-            <el-icon v-if="item.meta.icon && globalStore.breadcrumbIcon" class="breadcrumb-icon">
+            <!-- <el-icon v-if="item.meta.icon && globalStore.breadcrumbIcon" class="breadcrumb-icon">
               <component :is="item.meta.icon"></component>
-              <!-- Render ikon sebagai komponen -->
-            </el-icon>
+            </el-icon> -->
 
             <!-- Tampilkan judul breadcrumb -->
             <span class="breadcrumb-title">{{ item.meta.title }}</span>
@@ -43,21 +43,18 @@ import { useRoute, useRouter } from 'vue-router'
 // Import ikon separator dari Element Plus
 import { ArrowRight } from '@element-plus/icons-vue'
 
-// Import Pinia stores
-import { useAuthStore } from '@/stores/modules/auth/auth.store'
-import { useGlobalStore } from '@/stores/modules/global/global.store'
+import { useAuth } from '@/modules/auth/auth.hook'
 
 // Inisialisasi hooks
 const route = useRoute()
 const router = useRouter()
-const authStore = useAuthStore()
-const globalStore = useGlobalStore()
+
+const { breadcrumbList: breadcrumbsGet } = useAuth()
 
 // Hitung daftar breadcrumb berdasarkan rute saat ini
 const breadcrumbList = computed(() => {
   // Ambil breadcrumb dari store sesuai rute terakhir yang dicocokkan
-  let breadcrumbData =
-    authStore.breadcrumbListGet[route.matched[route.matched.length - 1].path] ?? []
+  let breadcrumbData = breadcrumbsGet.value[route.matched[route.matched.length - 1].path] ?? []
 
   // Jika breadcrumb tidak dimulai dari home, prepend home manual
   if (breadcrumbData[0].path !== HOME_URL) {

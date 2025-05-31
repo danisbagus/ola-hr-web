@@ -1,8 +1,8 @@
 // Import Modul & Dependency
 import { createRouter, createWebHashHistory } from 'vue-router' // Vue Router untuk routing berbasis hash
 import { staticRouter, errorRouter } from '@/router/modules/staticRouter' // Import route statis & route error
-import { useUserStore } from '@/stores/modules/user/user.store' // Store untuk data pengguna (token, info)
-import { useAuthStore } from '@/stores/modules/auth/auth.store' // Store untuk data otorisasi (menu, hak akses)
+import { useAuth } from '@/modules/auth/auth.hook'
+import { useUser } from '@/modules/user/user.hook'
 import { LOGIN_URL, ROUTER_WHITE_LIST } from '@/config' // Konstanta konfigurasi URL login dan whitelist route
 import { initDynamicRouter } from '@/router/modules/dynamicRouter' // Fungsi inisialisasi dynamic route
 
@@ -38,8 +38,10 @@ const router = createRouter({
 // Middleware Routing: beforeEach
 // beforeEach: Guard untuk mencegah akses tanpa otorisasi.
 router.beforeEach(async (to, from, next) => {
-  const userStore = useUserStore() // Ambil instance user store
-  const authStore = useAuthStore() // Ambil instance auth store
+  const { authMenuList, setRouteName } = useAuth()
+  const { token } = useUser()
+
+  // todo: add NProgress
 
   // 1. Dynamic page title (set <title>)
   const title = import.meta.env.VITE_GLOB_APP_TITLE // Ambil judul global dari environment variable
@@ -47,7 +49,7 @@ router.beforeEach(async (to, from, next) => {
 
   // 2️. Jika user mengakses halaman login
   if (to.path.toLocaleLowerCase() === LOGIN_URL) {
-    if (userStore.token) return next(from.fullPath) // Jika sudah login, kembalikan ke halaman sebelumnya
+    if (token) return next(from.fullPath) // Jika sudah login, kembalikan ke halaman sebelumnya
     resetRouter() // Jika belum login, reset semua route dynamic
     return next() // Izinkan akses ke halaman login
   }
@@ -56,16 +58,16 @@ router.beforeEach(async (to, from, next) => {
   if (ROUTER_WHITE_LIST.includes(to.path)) return next()
 
   // 4️. Jika tidak ada token (belum login), redirect ke login
-  if (!userStore.token) return next({ path: LOGIN_URL, replace: true })
+  if (!token) return next({ path: LOGIN_URL, replace: true })
 
   // 5️. Jika menu belum dimuat, inisialisasi dynamic route
-  if (!authStore.authMenuListGet.length) {
+  if (!authMenuList.value.length) {
     await initDynamicRouter() // Ambil daftar menu dan generate route dinamis
     return next({ ...to, replace: true }) // Replace agar tidak membuat riwayat baru
   }
 
   // 6️. Simpan nama route untuk validasi hak akses tombol
-  authStore.setRouteName(to.name as string)
+  setRouteName(to.name as string)
 
   // 7️. Lanjutkan ke halaman tujuan
   next()
@@ -73,8 +75,9 @@ router.beforeEach(async (to, from, next) => {
 
 // Fungsi Reset Router (hapus semua dynamic route)
 export const resetRouter = () => {
-  const authStore = useAuthStore() // Ambil auth store
-  authStore.flatMenuListGet.forEach(route => {
+  const { flatMenuList } = useAuth()
+
+  flatMenuList.value.forEach(route => {
     // Iterasi semua route yang sudah ditambahkan
     const { name } = route
     if (name && router.hasRoute(name))

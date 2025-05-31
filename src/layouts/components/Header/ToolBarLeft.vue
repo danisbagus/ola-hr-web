@@ -5,22 +5,16 @@
     <CollapseIcon id="collapseIcon" />
 
     <!-- Komponen breadcrumb (navigasi jalur halaman), hanya ditampilkan jika diaktifkan di globalStore -->
-    <Breadcrumb v-show="globalStore.breadcrumb" id="breadcrumb" />
+    <Breadcrumb id="breadcrumb" />
   </div>
 </template>
 
 <script setup lang="ts">
-// Import store global untuk mengambil konfigurasi tampilan UI global
-import { useGlobalStore } from '@/stores/modules/global/global.store'
-
 // Import komponen CollapseIcon (untuk toggle sidebar)
 import CollapseIcon from './components/CollapseIcon.vue'
 
 // Import komponen Breadcrumb (navigasi jalur halaman)
 import Breadcrumb from './components/Breadcrumb.vue'
-
-// Inisialisasi store global, digunakan untuk mengakses state global seperti 'breadcrumb'
-const globalStore = useGlobalStore()
 </script>
 
 <style scoped lang="scss">

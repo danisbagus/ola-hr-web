@@ -96,9 +96,8 @@
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 
-// Mengimpor Pinia stores
-import { useTabsStore } from '@/stores/modules/tabs/tabs.store'
-import { useKeepAliveStore } from '@/stores/modules/keepAlive/keepAlive.store'
+// Mengimpor Pinia storess
+// import { useKeepAliveStore } from '@/stores/modules/keepAlive/keepAlive.store'
 
 // Tipe komponen form dari Element Plus
 import type { ElForm } from 'element-plus'
@@ -122,9 +121,8 @@ const { login: loginApi, loginForm, isLoadingLogin } = useAuth()
 import { useUser } from '@/modules/user/user.hook'
 const { getUserInfo } = useUser()
 
-// Store inisialisasi
-const tabsStore = useTabsStore()
-const keepAliveStore = useKeepAliveStore()
+// Store inisialisasis
+// const keepAliveStore = useKeepAliveStore()
 
 // Router inisialisasi
 const router = useRouter()
@@ -159,9 +157,9 @@ const login = (formEl: FormInstance | undefined) => {
 
       // Ambil info user terlebih dahulu
       await getUserInfo()
-      // Bersihkan tab & keep-alive store (reset state UI)
-      tabsStore.setTabs([])
-      keepAliveStore.setKeepAliveName([])
+
+      // Bersihkan keep-alive store (reset state UI)
+      //todo: keepAliveStore.setKeepAliveName([])
 
       // Arahkan user ke halaman utama (HOME_URL)
       router.push(HOME_URL)

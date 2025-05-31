@@ -1,23 +1,14 @@
 <template>
   <!-- Komponen ikon dari Element Plus, digunakan untuk tombol collapse/expand sidebar -->
-  <el-icon class="collapse-icon" @click="changeCollapse">
+  <el-icon class="collapse-icon" @click="toggleCollapse">
     <!-- Menggunakan dynamic component: jika sidebar collapse maka tampilkan ikon 'expand', jika tidak tampilkan 'fold' -->
-    <component :is="globalStore.isCollapse ? 'expand' : 'fold'"></component>
+    <component :is="isCollapse ? 'expand' : 'fold'"></component>
   </el-icon>
 </template>
 
 <script setup lang="ts">
-// Import global store untuk mengakses dan mengubah state UI global
-import { useGlobalStore } from '@/stores/modules/global/global.store'
-
-// Inisialisasi store global
-const globalStore = useGlobalStore()
-
-// Fungsi untuk toggle (ubah) state collapse sidebar
-const changeCollapse = () => {
-  // Mengubah nilai isCollapse menjadi kebalikannya
-  globalStore.setGlobalState('isCollapse', !globalStore.isCollapse)
-}
+import { useGlobal } from '@/modules/global/global.hook'
+const { isCollapse, toggleCollapse } = useGlobal()
 </script>
 
 <style scoped lang="scss">
