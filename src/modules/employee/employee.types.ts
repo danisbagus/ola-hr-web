@@ -15,13 +15,15 @@ export interface ReqEmployeeList {
 }
 export interface EmployeeList {
   id: number
-  employee_id: string
+  employee_number: string
   name: string
   email: string
   division: string
   role: string
+  employement_status: string
   is_active: boolean
   created_at: string
+  updated_at: string
 }
 
 export interface ResEmployeeList {

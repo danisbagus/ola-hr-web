@@ -99,14 +99,9 @@ export interface ColumnProps<T = any>
   // Untuk menyesuaikan nama properti dari item enum, misalnya key yang digunakan untuk 'label', 'value', dan 'children'.
   fieldNames?: FieldNamesProps
 
-  // headerRender?: (scope: HeaderRenderScope<T>) => VNode
-  // // Fungsi untuk merender header kolom secara kustom menggunakan sintaks JSX/TSX.
-
   // Fungsi untuk merender isi sel secara kustom menggunakan JSX/TSX atau string biasa.
   render?: (scope: RenderScope<T>) => VNode | string
 }
-
-// export type ProTableInstance = Omit<InstanceType<typeof ProTable>, keyof ComponentPublicInstance | keyof ProTableProps>;
 
 // Tipe `RenderScope<T>` digunakan untuk mendefinisikan konteks data yang tersedia aat merender sel (`cell`) dalam sebuah tabel. Tipe ini biasa digunakan dalam fungsi render atau slot khusus seperti `v-slot="{ row, $index, column }"`.
 // saat merender sel dalam sebuah tabel. Cocok digunakan untuk custom render .
@@ -115,14 +110,5 @@ export type RenderScope<T> = {
   row: T // Data baris saat ini
   $index: number // Indeks baris saat ini
   column: TableColumnCtx<T> // Informasi kolom terkait (misalnya, prop, label, dll.)
-  [key: string]: any // Untuk properti tambahan (opsional)
-}
-
-// Tipe `HeaderRenderScope<T>` digunakan untuk mendefinisikan konteks data yang tersedia
-// saat merender bagian header kolom dalam tabel. Cocok digunakan untuk custom header slot.
-// @template T Tipe data per baris tabel (meskipun biasanya header tidak pakai data langsung)
-export type HeaderRenderScope<T> = {
-  $index: number // Indeks kolom saat ini
-  column: TableColumnCtx<T> // Informasi kolom header terkait
   [key: string]: any // Untuk properti tambahan (opsional)
 }

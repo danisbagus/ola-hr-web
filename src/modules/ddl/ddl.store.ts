@@ -7,8 +7,8 @@ export const useDdlStore = defineStore('ola-hr-ddl', {
     divisionDdl: [],
     roleDdl: [],
     generalStatus: [
-      { label: 'Active', value: true, disabled: false },
-      { label: 'Inactive', value: false, disabled: false }
+      { label: 'Active', value: 1, disabled: false },
+      { label: 'Inactive', value: 0, disabled: false }
     ]
   }),
   getters: {},

@@ -9,7 +9,7 @@ import * as Icons from '@element-plus/icons-vue' // Semua ikon dari Element Plus
 
 // Routing & State Management
 import router from '@/router/index.ts' // Router untuk navigasi antar halaman
-import pinia from '@/stores' // Pinia store (state management Vue)
+import pinia from '@/lib/pinia/index' // Pinia store (state management Vue)
 
 // Gaya & Aset Kustom
 import '@/styles/common.scss' // SCSS umum untuk konsistensi UI

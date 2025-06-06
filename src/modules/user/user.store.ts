@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { UserState, ReqUserInfo } from '@/modules/user/user.types'
-import piniaPersistConfig from '@/stores/helper/persist'
+import piniaPersistConfig from '@/lib/pinia/persist'
 
 export const useUserStore = defineStore('ola-hr-user', {
   state: (): UserState => ({

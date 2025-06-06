@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { GlobalState } from '@/modules/global/global.types'
-import piniaPersistConfig from '@/stores/helper/persist'
+import piniaPersistConfig from '@/lib/pinia/persist'
 
 export const useGlobalStore = defineStore('ola-hr-global', {
   state: (): GlobalState => ({

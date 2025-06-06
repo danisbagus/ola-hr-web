@@ -4,7 +4,7 @@
     <!-- Form pencarian menggunakan Element Plus -->
     <el-form ref="formRef" :model="searchParam">
       <!-- Komponen Grid yang mengatur tata letak responsif form item -->
-      <Grid ref="gridRef" :collapsed="collapsed" :gap="[20, 0]" :cols="searchCol">
+      <Grid :gap="[30, 0]" :cols="searchCol">
         <!-- Iterasi setiap kolom pencarian -->
         <GridItem
           v-for="(item, index) in columns"
@@ -12,8 +12,6 @@
           v-bind="getResponsive(item)"
           :index="index"
         >
-          <!-- v-bind="getResponsive(item)": Tentukan atribut responsif berdasarkan props kolom -->
-
           <!-- Komponen FormItem dari Element Plus -->
           <el-form-item>
             <template #label>
@@ -44,20 +42,6 @@
             <el-button type="primary" :icon="Search" @click="search"> Search </el-button>
             <!-- Tombol reset pencarian -->
             <el-button :icon="Delete" @click="reset"> Reset </el-button>
-            <!-- Tombol collapse/expand jika form terlalu panjang -->
-            <el-button
-              v-if="showCollapse"
-              type="primary"
-              link
-              class="search-isOpen"
-              @click="collapsed = !collapsed"
-            >
-              {{ collapsed ? 'Expand' : 'Collapse' }}
-              <el-icon class="el-icon--right">
-                <!-- Ikon collapse/expand dinamis -->
-                <component :is="collapsed ? ArrowDown : ArrowUp"></component>
-              </el-icon>
-            </el-button>
           </div>
         </GridItem>
       </Grid>
@@ -66,10 +50,9 @@
 </template>
 
 <script setup lang="ts" name="SearchForm">
-import { ref, computed } from 'vue'
 import type { ColumnProps } from '@/components/Table/interface'
 import type { BreakPoint } from '@/components/Grid/interface'
-import { Delete, Search, ArrowDown, ArrowUp } from '@element-plus/icons-vue'
+import { Delete, Search } from '@element-plus/icons-vue'
 import SearchFormItem from './components/SearchFormItem.vue'
 import Grid from '@/components/Grid/index.vue'
 import GridItem from '@/components/Grid/components/GridItem.vue'
@@ -84,7 +67,7 @@ interface TableProps {
 }
 
 // Menyediakan nilai default jika props tidak diberikan
-const props = withDefaults(defineProps<TableProps>(), {
+withDefaults(defineProps<TableProps>(), {
   columns: () => [],
   searchParam: () => ({})
 })
@@ -101,32 +84,4 @@ const getResponsive = (item: ColumnProps) => {
     xl: item.search?.xl
   }
 }
-
-// Status collapsible form (expand/collapse)
-const collapsed = ref(true)
-
-// Referensi ke Grid, digunakan untuk mengambil breakpoint yang sedang aktif
-const gridRef = ref()
-
-// Hitung breakpoint aktif berdasarkan Grid
-const breakPoint = computed<BreakPoint>(() => gridRef.value?.breakPoint)
-
-// Menentukan apakah tombol "Expand/Collapse" perlu ditampilkan
-const showCollapse = computed(() => {
-  let show = false
-  props.columns.reduce((prev, current) => {
-    // Hitung total span + offset untuk setiap field
-    prev +=
-      (current.search![breakPoint.value]?.span ?? current.search?.span ?? 1) +
-      (current.search![breakPoint.value]?.offset ?? current.search?.offset ?? 0)
-    // Jika nilai lebih besar dari batas kolom (misalnya 24), tampilkan tombol collapse
-    if (typeof props.searchCol !== 'number') {
-      if (prev >= props.searchCol[breakPoint.value]) show = true
-    } else {
-      if (prev >= props.searchCol) show = true
-    }
-    return prev
-  }, 0)
-  return show
-})
 </script>
