@@ -6,9 +6,18 @@ export const useDdlStore = defineStore('ola-hr-ddl', {
   state: (): DdlState => ({
     divisionDdl: [],
     roleDdl: [],
+    genders: [
+      { label: 'Male', value: 'MALE', disabled: false },
+      { label: 'Female', value: 'FEMALE', disabled: false }
+    ],
     generalStatus: [
       { label: 'Active', value: 1, disabled: false },
       { label: 'Inactive', value: 0, disabled: false }
+    ],
+    EmploymentStatus: [
+      { label: 'Permanent', value: 'PERMANENT', disabled: false },
+      { label: 'Contract', value: 'CONTRACT', disabled: false },
+      { label: 'Internship', value: 'INTERNSHIP', disabled: false }
     ]
   }),
   getters: {},

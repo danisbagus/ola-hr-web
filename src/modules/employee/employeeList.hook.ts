@@ -3,7 +3,7 @@ import { getEmployeeListApi } from '@/modules/employee/employee.service'
 import { useEmployeeStore } from '@/modules/employee/employee.store'
 import { getErrorMessage } from '@/shared/utils/http/getErrorMessage'
 import type { EmployeeList } from '@/modules/employee/employee.types'
-import type { ListComposable } from '@/shared/types/listComposable'
+import type { ListComposable } from '@/shared/types/hook'
 
 export const useEmployeeList = (): ListComposable<EmployeeList> => {
   const employeeStore = useEmployeeStore()

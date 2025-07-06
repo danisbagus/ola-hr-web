@@ -12,3 +12,11 @@ export interface ListComposable<TData = any> {
   isSuccess: Ref<boolean>
   errorMessage: Ref<string>
 }
+
+export interface DetailComposable<TData = any> {
+  data: Ref<TData>
+  fetchDetail: () => Promise<void>
+  isSuccess: Ref<boolean>
+  isLoading: Ref<boolean>
+  errorMessage: Ref<string>
+}

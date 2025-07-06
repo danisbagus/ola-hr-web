@@ -80,12 +80,11 @@ import { Refresh, Search } from '@element-plus/icons-vue'
 import SearchForm from '@/components/SearchForm/index.vue'
 import Pagination from './components/Pagination.vue'
 import TableColumn from './components/TableColumn.vue'
-import { useTable } from '@/hooks/useTable'
 import { handleProp } from '@/utils'
 
 import type { BreakPoint } from '@/components/Grid/interface'
 import type { ColumnProps, TypeProps } from '@/components/Table/interface'
-import type { ListComposable } from '@/shared/types/listComposable'
+import type { ListComposable } from '@/shared/types/hook'
 
 export interface TableProps {
   columns: ColumnProps[]
@@ -114,11 +113,6 @@ const props = withDefaults(defineProps<TableProps>(), {
   rowKey: 'id',
   searchCol: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 })
 })
-
-// 表格多选 Hooks
-// const { selectionChange, selectedList, selectedListIds, isSelected } = useSelection(props.rowKey)
-
-// const { data: dataNew, filters, fetchList, setFilters, resetFilters } = props.useListComposable()
 
 const {
   data,

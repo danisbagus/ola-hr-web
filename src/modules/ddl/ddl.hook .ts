@@ -52,7 +52,9 @@ export function useDdl() {
   return {
     divisionDdl: computed(() => ddlStore.divisionDdl),
     roleDdl: computed(() => ddlStore.roleDdl),
+    genders: computed(() => ddlStore.genders),
     generalStatus: computed(() => ddlStore.generalStatus),
+    employmentStatus: computed(() => ddlStore.EmploymentStatus),
     getDivisionDdl,
     getRoleDdl,
     isLoadingDivision,

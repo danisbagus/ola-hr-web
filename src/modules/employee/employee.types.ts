@@ -2,6 +2,7 @@ import type { ResPaginationMeta } from '@/shared/types/pagination'
 
 export interface EmployeeState {
   employeeList: EmployeeList[]
+  employeeDetail: ResEmployeeDetail | null
   paginationEmployeeList: ResPaginationMeta
 }
 
@@ -29,4 +30,22 @@ export interface EmployeeList {
 export interface ResEmployeeList {
   employees: EmployeeList[]
   pagination: ResPaginationMeta
+}
+
+export interface ResEmployeeDetail {
+  id: number
+  employee_number: string
+  name: string
+  email: string
+  phone_number: string
+  employment_status: string
+  gender: string
+  division_id: number
+  division_name: string
+  role_id: number
+  role_name: string
+  hire_date: string
+  birth_date: string
+  address: string
+  is_active: boolean
 }
