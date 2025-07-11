@@ -41,9 +41,21 @@ export interface ResEmployeeDetail {
   employment_status: string
   gender: string
   division_id: number
-  division_name: string
   role_id: number
-  role_name: string
+  hire_date: string
+  birth_date: string
+  address: string
+  is_active: boolean
+}
+
+export interface ReqUpdateEmployee {
+  name: string
+  phone_number: string
+  email: string
+  employment_status: string
+  gender: string
+  division_id: number
+  role_id: number
   hire_date: string
   birth_date: string
   address: string

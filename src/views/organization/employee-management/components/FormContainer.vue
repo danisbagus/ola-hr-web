@@ -8,7 +8,13 @@
     </template>
   </el-skeleton>
 
-  <Form v-else :formData="employeeDetail" @cancel="handleCancel" @submit="handleSubmit" />
+  <Form
+    v-else
+    :detail="employeeDetail"
+    :form="updateEmployeeForm"
+    @cancel="handleCancel"
+    @submit="handleSubmit"
+  />
 
   <!-- Cancel Confirmation Dialog -->
   <el-dialog
@@ -27,30 +33,37 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
+import { cloneDeep, isEqual } from 'lodash-es'
 import Form from './Form.vue'
 import { ElNotification } from 'element-plus'
 import { useEmployee } from '@/modules/employee/employee.hook'
+import { useEmployeeList } from '@/modules/employee/employeeList.hook'
+import type { ReqUpdateEmployee } from '@/modules/employee/employee.types'
 
 const {
   employeeDetail,
   getEmployeeDetail,
+  updateEmployee,
   resetEmployeeDetail,
+  updateEmployeeForm,
   isLoadingGetEmployeeDetail,
   isGetEmployeeDetailSuccess,
-  getEmployeeDetailErrorMessage
+  isUpdateEmployeeSuccess,
+  getEmployeeDetailErrorMessage,
+  updateEmployeeErrorMessage
 } = useEmployee()
+
+const { fetchList } = useEmployeeList()
 
 const props = defineProps<{ id: number }>()
 const emit = defineEmits(['close'])
 
-// todo: next compare with original data for confirmation logic
-const formData = ref<any>(null)
-const originalData = ref<any>(null)
+const originalData = ref<ReqUpdateEmployee | null>(null)
 
 const cancelConfirmVisible = ref(false)
 
 function isChanged() {
-  return JSON.stringify(formData.value) !== JSON.stringify(originalData.value)
+  return !isEqual(updateEmployeeForm, originalData.value)
 }
 
 const handleCancel = async () => {
@@ -69,17 +82,22 @@ const confirmCancel = () => {
 }
 
 const handleSubmit = async (data: any) => {
-  try {
-    // Simulasi update
-    await new Promise(r => setTimeout(r, 500))
+  await updateEmployee(props.id)
+  if (!isUpdateEmployeeSuccess.value) {
+    ElNotification({
+      title: 'Failed Update Employee Data',
+      type: 'error',
+      message: updateEmployeeErrorMessage.value
+    })
 
-    // Normally: await axios.put(`/api/employees/${data.id}`, data)
-    ElNotification({ title: 'Successfully Change Employee Data', type: 'success' })
-    emit('close')
-    resetEmployeeDetail()
-  } catch (err) {
-    ElNotification({ title: 'Failed Change Employee Data', type: 'success' })
+    return
   }
+
+  ElNotification({ title: 'Successfully Change Employee Data', type: 'success' })
+  resetEmployeeDetail()
+  emit('close')
+
+  await fetchList()
 }
 
 const handleGetEmployeeDetail = async (id: number) => {
@@ -87,13 +105,18 @@ const handleGetEmployeeDetail = async (id: number) => {
 
   await nextTick()
   await getEmployeeDetail(id)
+
   if (!isGetEmployeeDetailSuccess.value) {
     ElNotification({
       title: 'Failed get employee data',
       type: 'error',
       message: getEmployeeDetailErrorMessage.value
     })
+
+    return
   }
+
+  originalData.value = cloneDeep(updateEmployeeForm)
 }
 
 watch(() => props.id, handleGetEmployeeDetail, { immediate: true })
