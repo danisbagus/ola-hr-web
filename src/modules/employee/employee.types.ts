@@ -48,14 +48,14 @@ export interface ResEmployeeDetail {
   is_active: boolean
 }
 
-export interface ReqUpdateEmployee {
+export interface ReqEmployee {
   name: string
   phone_number: string
   email: string
   employment_status: string
   gender: string
-  division_id: number
-  role_id: number
+  division_id: number | null
+  role_id: number | null
   hire_date: string
   birth_date: string
   address: string

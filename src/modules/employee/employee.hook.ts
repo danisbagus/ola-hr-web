@@ -1,30 +1,35 @@
 import { ref, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useEmployeeStore } from '@/modules/employee/employee.store'
-import { getEmployeeDetailApi, updateEmployeeApi } from '@/modules/employee/employee.service'
+import {
+  getEmployeeDetailApi,
+  updateEmployeeApi,
+  createEmployeeApi,
+  deleteEmployeeApi
+} from '@/modules/employee/employee.service'
 import { getErrorMessage } from '@/shared/utils/http/getErrorMessage'
-import type { ReqUpdateEmployee, ResEmployeeDetail } from '@/modules/employee/employee.types'
+import type { ReqEmployee, ResEmployeeDetail } from '@/modules/employee/employee.types'
 
 export function useEmployee() {
   const employeeStore = useEmployeeStore()
   const { employeeDetail } = storeToRefs(employeeStore)
 
   // State
-  const defaultForm: ReqUpdateEmployee = {
+  const defaultForm: ReqEmployee = {
     name: '',
     email: '',
     phone_number: '',
     employment_status: '',
     gender: '',
-    division_id: 0,
-    role_id: 0,
+    division_id: null,
+    role_id: null,
     hire_date: '',
     birth_date: '',
     address: '',
     is_active: false
   }
 
-  const updateEmployeeForm = reactive<ReqUpdateEmployee>({ ...defaultForm })
+  const employeeForm = reactive<ReqEmployee>({ ...defaultForm })
 
   const isLoadingGetEmployeeDetail = ref(false)
   const isGetEmployeeDetailSuccess = ref(false)
@@ -33,6 +38,14 @@ export function useEmployee() {
   const isLoadingUpdateEmployee = ref(false)
   const isUpdateEmployeeSuccess = ref(false)
   const updateEmployeeErrorMessage = ref('')
+
+  const isLoadingCreateEmployee = ref(false)
+  const isCreateEmployeeSuccess = ref(false)
+  const createEmployeeErrorMessage = ref('')
+
+  const isLoadingDeleteEmployee = ref(false)
+  const isDeleteEmployeeSuccess = ref(false)
+  const deleteEmployeeErrorMessage = ref('')
 
   // Actions
   const getEmployeeDetail = async (id: number) => {
@@ -45,7 +58,7 @@ export function useEmployee() {
     try {
       const { data } = await getEmployeeDetailApi(id)
       employeeStore.setEmployeeDetail(data)
-      setUpdateFormFromDetail(data)
+      setFormFromDetail(data)
       isGetEmployeeDetailSuccess.value = true
     } catch (error) {
       getEmployeeDetailErrorMessage.value = getErrorMessage(error)
@@ -60,12 +73,42 @@ export function useEmployee() {
     updateEmployeeErrorMessage.value = ''
 
     try {
-      await updateEmployeeApi(id, updateEmployeeForm)
+      await updateEmployeeApi(id, { ...employeeForm })
       isUpdateEmployeeSuccess.value = true
     } catch (error) {
       updateEmployeeErrorMessage.value = getErrorMessage(error)
     } finally {
       isLoadingUpdateEmployee.value = false
+    }
+  }
+
+  const createEmployee = async () => {
+    isLoadingCreateEmployee.value = true
+    isCreateEmployeeSuccess.value = false
+    createEmployeeErrorMessage.value = ''
+    try {
+      const { data } = await createEmployeeApi({ ...employeeForm })
+      isCreateEmployeeSuccess.value = true
+      return data
+    } catch (error) {
+      createEmployeeErrorMessage.value = getErrorMessage(error)
+    } finally {
+      isLoadingCreateEmployee.value = false
+    }
+  }
+
+  const deleteEmployee = async (id: number) => {
+    isLoadingDeleteEmployee.value = true
+    isDeleteEmployeeSuccess.value = false
+    deleteEmployeeErrorMessage.value = ''
+
+    try {
+      await deleteEmployeeApi(id)
+      isDeleteEmployeeSuccess.value = true
+    } catch (error) {
+      deleteEmployeeErrorMessage.value = getErrorMessage(error)
+    } finally {
+      isLoadingDeleteEmployee.value = false
     }
   }
 
@@ -77,8 +120,8 @@ export function useEmployee() {
   }
 
   // Helpers
-  const setUpdateFormFromDetail = (detail: ResEmployeeDetail) => {
-    Object.assign(updateEmployeeForm, {
+  const setFormFromDetail = (detail: ResEmployeeDetail) => {
+    Object.assign(employeeForm, {
       name: detail.name,
       email: detail.email,
       phone_number: detail.phone_number,
@@ -94,18 +137,20 @@ export function useEmployee() {
   }
 
   const resetUpdateForm = () => {
-    Object.assign(updateEmployeeForm, defaultForm)
+    Object.assign(employeeForm, defaultForm)
   }
 
   // Expose to components
   return {
     // Data
     employeeDetail,
-    updateEmployeeForm,
+    employeeForm,
 
     // Actions
     getEmployeeDetail,
     updateEmployee,
+    createEmployee,
+    deleteEmployee,
     resetEmployeeDetail,
 
     // States
@@ -115,6 +160,14 @@ export function useEmployee() {
 
     isLoadingUpdateEmployee,
     isUpdateEmployeeSuccess,
-    updateEmployeeErrorMessage
+    updateEmployeeErrorMessage,
+
+    isLoadingCreateEmployee,
+    isCreateEmployeeSuccess,
+    createEmployeeErrorMessage,
+
+    isLoadingDeleteEmployee,
+    isDeleteEmployeeSuccess,
+    deleteEmployeeErrorMessage
   }
 }

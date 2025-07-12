@@ -11,9 +11,10 @@
   <Form
     v-else
     :detail="employeeDetail"
-    :form="updateEmployeeForm"
+    :form="employeeForm"
     @cancel="handleCancel"
     @submit="handleSubmit"
+    mode="edit"
   />
 
   <!-- Cancel Confirmation Dialog -->
@@ -38,14 +39,14 @@ import Form from './Form.vue'
 import { ElNotification } from 'element-plus'
 import { useEmployee } from '@/modules/employee/employee.hook'
 import { useEmployeeList } from '@/modules/employee/employeeList.hook'
-import type { ReqUpdateEmployee } from '@/modules/employee/employee.types'
+import type { ReqEmployee } from '@/modules/employee/employee.types'
 
 const {
   employeeDetail,
   getEmployeeDetail,
   updateEmployee,
   resetEmployeeDetail,
-  updateEmployeeForm,
+  employeeForm,
   isLoadingGetEmployeeDetail,
   isGetEmployeeDetailSuccess,
   isUpdateEmployeeSuccess,
@@ -58,12 +59,12 @@ const { fetchList } = useEmployeeList()
 const props = defineProps<{ id: number }>()
 const emit = defineEmits(['close'])
 
-const originalData = ref<ReqUpdateEmployee | null>(null)
+const originalData = ref<ReqEmployee | null>(null)
 
 const cancelConfirmVisible = ref(false)
 
 function isChanged() {
-  return !isEqual(updateEmployeeForm, originalData.value)
+  return !isEqual(employeeForm, originalData.value)
 }
 
 const handleCancel = async () => {
@@ -116,7 +117,7 @@ const handleGetEmployeeDetail = async (id: number) => {
     return
   }
 
-  originalData.value = cloneDeep(updateEmployeeForm)
+  originalData.value = cloneDeep(employeeForm)
 }
 
 watch(() => props.id, handleGetEmployeeDetail, { immediate: true })
