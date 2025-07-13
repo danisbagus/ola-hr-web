@@ -1,6 +1,6 @@
 <template>
   <div class="table-box">
-    <Table ref="table" :columns="columns" :use-list-composable="useEmployeeList">
+    <DynamicTable ref="table" :columns="columns" :use-list-composable="useEmployeeList">
       <template #tableHeader="scope">
         <el-button v-auth="'add'" type="primary" :icon="CirclePlus" @click="addEmployee"
           >Add</el-button
@@ -24,7 +24,7 @@
           >Delete</el-button
         >
       </template>
-    </Table>
+    </DynamicTable>
     <Drawer ref="drawerRef" />
   </div>
   <!-- Delete Confirmation Dialog -->
@@ -44,7 +44,7 @@
 
 <script setup lang="tsx">
 import { reactive, h, onMounted, ref } from 'vue'
-import Table from '@/components/Table/index.vue'
+import DynamicTable from '@/components/DynamicTable/index.vue'
 import Drawer from '@/components/Drawer/index.vue'
 import FormEditContainer from '@/views/organization/employee-management/components/FormEditContainer.vue'
 import FormAddContainer from '@/views/organization/employee-management/components/FormAddContainer.vue'
@@ -54,7 +54,7 @@ import { useEmployeeList } from '@/modules/employee/employeeList.hook'
 import { useEmployee } from '@/modules/employee/employee.hook'
 import { useDdl } from '@/modules/ddl/ddl.hook.ts'
 
-import type { ColumnProps } from '@/components/Table/interface'
+import type { ColumnProps } from '@/components/DynamicTable/interface'
 import type { EmployeeList } from '@/modules/employee/employee.types'
 
 const { getDivisionDdl, getRoleDdl, divisionDdl, roleDdl, generalStatus } = useDdl()

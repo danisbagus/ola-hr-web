@@ -83,7 +83,7 @@ import TableColumn from './components/TableColumn.vue'
 import { handleProp } from '@/utils'
 
 import type { BreakPoint } from '@/components/Grid/interface'
-import type { ColumnProps, TypeProps } from '@/components/Table/interface'
+import type { ColumnProps, TypeProps } from '@/components/DynamicTable/interface'
 import type { ListComposable } from '@/shared/types/hook'
 
 export interface TableProps {

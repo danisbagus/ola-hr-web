@@ -24,7 +24,7 @@
 <script setup lang="ts" name="SearchFormItem">
 import { computed } from 'vue'
 import { handleProp } from '@/utils'
-import type { ColumnProps } from '@/components/Table/interface'
+import type { ColumnProps } from '@/components/DynamicTable/interface'
 
 // Definisi props untuk komponen pencarian tunggal
 interface SearchFormItem {

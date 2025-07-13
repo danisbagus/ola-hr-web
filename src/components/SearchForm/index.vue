@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts" name="SearchForm">
-import type { ColumnProps } from '@/components/Table/interface'
+import type { ColumnProps } from '@/components/DynamicTable/interface'
 import type { BreakPoint } from '@/components/Grid/interface'
 import { Delete, Search } from '@element-plus/icons-vue'
 import SearchFormItem from './components/SearchFormItem.vue'
