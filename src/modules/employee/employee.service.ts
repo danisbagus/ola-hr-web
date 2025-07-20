@@ -25,3 +25,7 @@ export const createEmployeeApi = (params: ReqEmployee) => {
 export const deleteEmployeeApi = (id: number) => {
   return http.delete<null>(`/api/employees/${id}`)
 }
+
+export const deleteBatchEmployeeApi = (ids: number[]) => {
+  return http.post<null>(`/api/employees/delete-batch`, { ids })
+}

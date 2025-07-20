@@ -11,7 +11,15 @@
         <el-button v-auth="'export'" type="primary" :icon="Download" plain disabled
           >Export</el-button
         >
-        <el-button type="danger" :icon="Delete" plain disabled> Batch Delete </el-button>
+        <el-button
+          type="danger"
+          :icon="Delete"
+          plain
+          :disabled="!scope.isSelected"
+          @click="openDeleteBatchConfirm(scope.selectedListIds)"
+        >
+          Batch Delete
+        </el-button>
       </template>
       <template #expand="scope">
         {{ scope.row }}
@@ -27,6 +35,7 @@
     </DynamicTable>
     <Drawer ref="drawerRef" />
   </div>
+
   <!-- Delete Confirmation Dialog -->
   <el-dialog
     v-model="deleteConfirmVisible"
@@ -34,10 +43,24 @@
     width="30%"
     @close="deleteConfirmVisible = false"
   >
-    <span>Are you sure you want to delete thi employee?</span>
+    <span>Are you sure you want to delete this employee?</span>
     <template #footer>
       <el-button @click="deleteConfirmVisible = false">No</el-button>
       <el-button type="danger" @click="handleDelete">Yes, Delete</el-button>
+    </template>
+  </el-dialog>
+
+  <!-- Batch Delete Confirmation Dialog -->
+  <el-dialog
+    v-model="deleteBatchConfirmVisible"
+    title="Delete Batch Confirmation"
+    width="30%"
+    @close="deleteBatchConfirmVisible = false"
+  >
+    <span>Are you sure you want to batch delete employee?</span>
+    <template #footer>
+      <el-button @click="deleteBatchConfirmVisible = false">No</el-button>
+      <el-button type="danger" @click="handleDeleteBatch">Yes, Delete</el-button>
     </template>
   </el-dialog>
 </template>
@@ -58,11 +81,20 @@ import type { ColumnProps } from '@/components/DynamicTable/interface'
 import type { EmployeeList } from '@/modules/employee/employee.types'
 
 const { getDivisionDdl, getRoleDdl, divisionDdl, roleDdl, generalStatus } = useDdl()
-const { deleteEmployee, isDeleteEmployeeSuccess, deleteEmployeeErrorMessage } = useEmployee()
+const {
+  deleteEmployee,
+  deleteBatchEmployee,
+  isDeleteEmployeeSuccess,
+  deleteEmployeeErrorMessage,
+  isDeleteBatchEmployeeSuccess,
+  deleteBatchEmployeeErrorMessage
+} = useEmployee()
 const { fetchList } = useEmployeeList()
 
 const deleteConfirmVisible = ref(false)
+const deleteBatchConfirmVisible = ref(false)
 const selectedId = ref(0)
+const selectedIds = ref<number[]>([])
 
 const columns = reactive<ColumnProps<EmployeeList>[]>([
   { type: 'selection', fixed: 'left', width: 50 },
@@ -160,6 +192,28 @@ const handleDelete = async () => {
 
   ElNotification({ title: 'Successfully Delete Employee Data', type: 'success' })
   deleteConfirmVisible.value = false
+  await fetchList()
+}
+
+const openDeleteBatchConfirm = (ids: number[]) => {
+  deleteBatchConfirmVisible.value = true
+  selectedIds.value = ids
+}
+
+const handleDeleteBatch = async () => {
+  await deleteBatchEmployee(selectedIds.value)
+  if (!isDeleteBatchEmployeeSuccess.value) {
+    ElNotification({
+      title: 'Failed Batch Delete Employee',
+      type: 'error',
+      message: deleteBatchEmployeeErrorMessage.value
+    })
+
+    return
+  }
+
+  ElNotification({ title: 'Successfully Batch Delete Employee', type: 'success' })
+  deleteBatchConfirmVisible.value = false
   await fetchList()
 }
 

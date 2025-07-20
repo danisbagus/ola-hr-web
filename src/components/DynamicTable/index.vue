@@ -11,13 +11,7 @@
   <div class="card table-main">
     <div class="table-header">
       <div class="header-button-lf">
-        <!-- <slot
-          name="tableHeader"
-          :selected-list="selectedList"
-          :selected-list-ids="selectedListIds"
-          :is-selected="isSelected"
-        /> -->
-        <slot name="tableHeader" />
+        <slot name="tableHeader" :selected-list-ids="selectedListIds" :is-selected="isSelected" />
       </div>
       <div class="header-button-ri">
         <slot name="toolButton">
@@ -26,16 +20,14 @@
         </slot>
       </div>
     </div>
-    <!-- <el-table
+    <el-table
       ref="tableRef"
       v-bind="$attrs"
-      :id="uuid"
-      :data="processTableData"
-      :border="border"
+      :data="data"
       :row-key="rowKey"
       @selection-change="selectionChange"
-    > -->
-    <el-table ref="tableRef" v-bind="$attrs" :data="data" :row-key="rowKey" :border="false">
+      :border="false"
+    >
       <template v-for="item in columnList" :key="item">
         <el-table-column
           v-if="item.type && columnTypes.includes(item.type)"
@@ -85,6 +77,7 @@ import { handleProp } from '@/utils'
 import type { BreakPoint } from '@/components/Grid/interface'
 import type { ColumnProps, TypeProps } from '@/components/DynamicTable/interface'
 import type { ListComposable } from '@/shared/types/hook'
+import { useSelection } from '@/shared/hooks/selection.hook'
 
 export interface TableProps {
   columns: ColumnProps[]
@@ -125,6 +118,8 @@ const {
   isSuccess,
   errorMessage
 } = props.useListComposable()
+
+const { selectionChange, selectedListIds, isSelected } = useSelection(props.rowKey)
 
 const handleFetchList = async () => {
   await fetchList()

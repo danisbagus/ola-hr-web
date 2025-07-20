@@ -5,7 +5,8 @@ import {
   getEmployeeDetailApi,
   updateEmployeeApi,
   createEmployeeApi,
-  deleteEmployeeApi
+  deleteEmployeeApi,
+  deleteBatchEmployeeApi
 } from '@/modules/employee/employee.service'
 import { getErrorMessage } from '@/shared/utils/http/getErrorMessage'
 import type { ReqEmployee, ResEmployeeDetail } from '@/modules/employee/employee.types'
@@ -46,6 +47,10 @@ export function useEmployee() {
   const isLoadingDeleteEmployee = ref(false)
   const isDeleteEmployeeSuccess = ref(false)
   const deleteEmployeeErrorMessage = ref('')
+
+  const isLoadingDeleteBatchEmployee = ref(false)
+  const isDeleteBatchEmployeeSuccess = ref(false)
+  const deleteBatchEmployeeErrorMessage = ref('')
 
   // Actions
   const getEmployeeDetail = async (id: number) => {
@@ -112,6 +117,21 @@ export function useEmployee() {
     }
   }
 
+  const deleteBatchEmployee = async (ids: number[]) => {
+    isLoadingDeleteBatchEmployee.value = true
+    isDeleteBatchEmployeeSuccess.value = false
+    deleteBatchEmployeeErrorMessage.value = ''
+
+    try {
+      await deleteBatchEmployeeApi(ids)
+      isDeleteBatchEmployeeSuccess.value = true
+    } catch (error) {
+      deleteBatchEmployeeErrorMessage.value = getErrorMessage(error)
+    } finally {
+      isLoadingDeleteBatchEmployee.value = false
+    }
+  }
+
   const resetEmployeeDetail = () => {
     employeeStore.setEmployeeDetail(null)
     resetUpdateForm()
@@ -151,6 +171,7 @@ export function useEmployee() {
     updateEmployee,
     createEmployee,
     deleteEmployee,
+    deleteBatchEmployee,
     resetEmployeeDetail,
 
     // States
@@ -168,6 +189,10 @@ export function useEmployee() {
 
     isLoadingDeleteEmployee,
     isDeleteEmployeeSuccess,
-    deleteEmployeeErrorMessage
+    deleteEmployeeErrorMessage,
+
+    isLoadingDeleteBatchEmployee,
+    isDeleteBatchEmployeeSuccess,
+    deleteBatchEmployeeErrorMessage
   }
 }
