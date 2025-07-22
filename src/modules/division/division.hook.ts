@@ -6,6 +6,7 @@ import { useDivisionStore } from '@/modules/division/division.store'
 import {
   getDivisionListApi,
   getDivisionDetailApi,
+  createDivisionApi,
   updateDivisionApi
 } from '@/modules/division/division.service'
 import { useNotify } from '@/shared/hooks/notify.hook'
@@ -18,6 +19,7 @@ export function useDivision() {
 
   const isLoadingGetDetail = ref(false)
   const isSuccessGetDetail = ref(false)
+  const isSuccessCreate = ref(false)
   const isSuccessUpdate = ref(false)
 
   const defaultForm: ReqDivision = {
@@ -59,10 +61,20 @@ export function useDivision() {
     try {
       await updateDivisionApi(id, { ...divisionForm })
       isSuccessUpdate.value = true
+      notifySuccess('Successfully update division')
     } catch (error) {
       notifyError('Failed to update division', getErrorMessage(error))
-    } finally {
-      notifySuccess('Successfully update division')
+    }
+  }
+
+  const createDivision = async () => {
+    isSuccessCreate.value = false
+    try {
+      await createDivisionApi({ ...divisionForm })
+      isSuccessCreate.value = true
+      notifySuccess('Successfully create division')
+    } catch (error) {
+      notifyError('Failed to create division', getErrorMessage(error))
     }
   }
 
@@ -101,6 +113,7 @@ export function useDivision() {
     // actions
     getDivisionList,
     getDivisionDetail,
+    createDivision,
     updateDivision,
     resetListParams,
     resetDivisionDetail,
@@ -115,6 +128,7 @@ export function useDivision() {
     divisionForm,
     isLoadingGetDetail,
     isSuccessGetDetail,
+    isSuccessCreate,
     isSuccessUpdate
   }
 }

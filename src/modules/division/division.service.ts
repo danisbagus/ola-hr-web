@@ -17,3 +17,7 @@ export const getDivisionDetailApi = (id: number) => {
 export const updateDivisionApi = (id: number, params: ReqDivision) => {
   return http.put<null>(`/api/divisions/${id}`, params)
 }
+
+export const createDivisionApi = (params: ReqDivision) => {
+  return http.post<null>('/api/divisions', params)
+}

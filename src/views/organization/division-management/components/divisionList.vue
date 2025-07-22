@@ -1,7 +1,9 @@
 <template>
   <DataTable ref="table" :columns="columns" :dataSource="divisionList">
     <template #tableHeader="scope">
-      <el-button v-auth="'add'" type="primary" :icon="CirclePlus">Add</el-button>
+      <el-button v-auth="'add'" type="primary" :icon="CirclePlus" @click="addDivision"
+        >Add</el-button
+      >
       <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain disabled
         >Batch Add</el-button
       >
@@ -46,6 +48,7 @@ import type { DivisionList } from '@/modules/division/division.types'
 import DataTable from '@/components/DataTable/index.vue'
 import Pagination from '@/components/Pagination/index.vue'
 import Drawer from '@/components/Drawer/index.vue'
+import DivisionAddContainer from './divisionAddContainer.vue'
 import DivisionEditContainer from '@/views/organization/division-management/components/divisionEditContainer.vue'
 import { useDdl } from '@/modules/ddl/ddl.hook.ts'
 import { useDivision } from '@/modules/division/division.hook.ts'
@@ -55,6 +58,14 @@ const { generalStatus } = useDdl()
 const { divisionList, paginationDivisionList, getDivisionList, setPage, setSize } = useDivision()
 
 const drawerRef = ref<InstanceType<typeof Drawer> | null>(null)
+
+const addDivision = () => {
+  drawerRef.value?.openDrawer({
+    title: 'Add Employee',
+    component: DivisionAddContainer,
+    props: {}
+  })
+}
 
 const editEmployee = (id: number) => {
   drawerRef.value?.openDrawer({
