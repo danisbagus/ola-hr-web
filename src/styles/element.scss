@@ -138,5 +138,16 @@
       justify-content: flex-end;
       margin-top: 20px;
     }
+
+    // Styling untuk drawer header
+    .el-drawer__header {
+      margin-bottom: 8px !important;
+      padding-bottom: 8px;
+    }
+    
+    // Styling untuk drawer body
+    .el-drawer__body {
+      padding-top: 0px;
+    }
   }
   

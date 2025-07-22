@@ -44,7 +44,7 @@
           }
         },
         {
-          "path": "organization/division-management",
+          "path": "/organization/division-management",
           "name": "divisionManagement",
           "component": "/organization/division-management/index",
           "meta": {

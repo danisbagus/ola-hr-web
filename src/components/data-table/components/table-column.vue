@@ -45,7 +45,7 @@
 import { useSlots } from 'vue'
 import type { ColumnProps } from '@/components/data-table/types'
 // Utilitas bantu untuk format nilai dan handle prop bertingkat
-import { formatValue, handleProp, handleRowAccordingToProp } from '@/utils'
+import { formatValue, handleProp, handleRowAccordingToProp } from '@/shared/utils/prop'
 
 // Mengakses semua slot yang diberikan dari parent
 const slots = useSlots()
