@@ -52,9 +52,9 @@
 import { computed } from 'vue'
 import { ElTable } from 'element-plus'
 
-import type { DataTable, ColumnProps, TypeProps } from '@/components/DataTable/types'
+import type { DataTable, ColumnProps, TypeProps } from '@/components/data-table/types'
 
-import TableColumn from './components/TableColumn.vue'
+import TableColumn from './components/table-column.vue'
 import { useSelection } from '@/shared/hooks/selection.hook'
 
 const props = withDefaults(defineProps<DataTable>(), {

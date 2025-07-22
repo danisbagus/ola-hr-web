@@ -21,7 +21,7 @@ import {
   type VNodeArrayChildren,
   type VNode
 } from 'vue'
-import type { BreakPoint } from './interface/index'
+import type { BreakPoint } from './types/index'
 
 // Tipe props yang bisa diterima oleh komponen
 type Props = {

@@ -3,13 +3,13 @@ import type { ResPaginationMeta } from '@/shared/types/pagination'
 export interface DivisionState {
   divisionList: DivisionList[]
   divisionDetail: ResDivisionDetail | null
-  paginationDivisionList: ResPaginationMeta
+  divisionListPagination: ResPaginationMeta
   divisionListParams: ReqDivisionList
 }
 
 export interface ReqDivisionList {
   keyword: string
-  is_active: number
+  is_active: number | null
   page: number
   size: number
 }

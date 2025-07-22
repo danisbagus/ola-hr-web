@@ -14,7 +14,7 @@ export const useDdlStore = defineStore('ola-hr-ddl', {
       { label: 'Active', value: 1, disabled: false },
       { label: 'Inactive', value: 0, disabled: false }
     ],
-    EmploymentStatus: [
+    employmentStatus: [
       { label: 'Permanent', value: 'PERMANENT', disabled: false },
       { label: 'Contract', value: 'CONTRACT', disabled: false },
       { label: 'Internship', value: 'INTERNSHIP', disabled: false }

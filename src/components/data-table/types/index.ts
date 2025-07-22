@@ -1,6 +1,5 @@
 import type { VNode } from 'vue'
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
-import type { OptionItem } from '@/shared/types/enum'
 
 export type TypeProps = 'selection'
 
@@ -12,7 +11,6 @@ export interface DataTable<T = any> {
 
 export interface ColumnProps<T = any> extends Partial<Omit<TableColumnCtx<T>, 'type'>> {
   type?: TypeProps
-  options?: OptionItem[]
   fieldNames?: FieldNamesProps
   render?: (scope: RenderScope<T>) => VNode | string
 }

@@ -1,0 +1,24 @@
+{
+    "code": "SUCCESS",
+    "message": "Successfully get divison role",
+    "errors": null,
+    "server_time": 1747485788,
+    "data": {
+      "ddl": [
+        {
+          "id": 1,
+          "name": "Manager"
+        },
+        {
+          "id": 2,
+          "name": "Admin"
+        }
+      ],
+      "pagination": {
+        "page": 1,
+        "size": 10,
+        "total_data": 2,
+        "total_page": 1
+      }
+    }
+  }

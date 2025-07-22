@@ -8,6 +8,7 @@
             label="Search"
             placeholder="Please Enter Division Name"
             v-model="divisionListParams.keyword"
+            clearable
           />
         </GridItem>
 
@@ -17,6 +18,7 @@
             label="Status"
             v-model="divisionListParams.is_active"
             :options="generalStatus"
+            clearable
           />
         </GridItem>
 
@@ -36,9 +38,9 @@
 import { Delete, Search } from '@element-plus/icons-vue'
 
 // Internal modules
-import Grid from '@/components/Grid/index.vue'
-import GridItem from '@/components/Grid/components/GridItem.vue'
-import FormFilterInput from '@/components/FormFilterInput/index.vue'
+import Grid from '@/components/grid/index.vue'
+import GridItem from '@/components/grid/components/grid-item.vue'
+import FormFilterInput from '@/components/form-filter-input/index.vue'
 import { useDivision } from '@/modules/division/division.hook'
 import { useDdl } from '@/modules/ddl/ddl.hook.ts'
 

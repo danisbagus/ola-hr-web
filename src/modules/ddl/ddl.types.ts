@@ -6,7 +6,7 @@ export interface DdlState {
   roleDdl: OptionItem[]
   genders: OptionItem[]
   generalStatus: OptionItem[]
-  EmploymentStatus: OptionItem[]
+  employmentStatus: OptionItem[]
 }
 
 export interface ReqDdlParams {

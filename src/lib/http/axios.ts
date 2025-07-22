@@ -3,7 +3,7 @@ import axios from 'axios'
 import type { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 // Import fungsi untuk menampilkan dan menyembunyikan loading full screen
-import { showFullScreenLoading, tryHideFullScreenLoading } from '@/components/Loading/fullScreen'
+import { showFullScreenLoading, tryHideFullScreenLoading } from '@/components/loading/fullScreen'
 
 // Import URL login dari konfigurasi
 import { LOGIN_URL } from '@/config'
@@ -81,7 +81,12 @@ class RequestHttp {
         axiosCanceler.removePending(config)
 
         // Sembunyikan loading jika sebelumnya diaktifkan
-        config.loading && tryHideFullScreenLoading()
+        // config.loading && tryHideFullScreenLoading()
+        // delay 300 ms
+        config.loading &&
+          setTimeout(() => {
+            tryHideFullScreenLoading()
+          }, 300)
 
         // Jika token expired, redirect ke login
         if (data.code == ResultEnum.UNAUTHORIZED) {

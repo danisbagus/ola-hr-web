@@ -17,7 +17,7 @@
     </template>
 
     <template #operation="scope">
-      <el-button type="primary" link :icon="EditPen" @click="editEmployee(scope.row.id)"
+      <el-button type="primary" link :icon="EditPen" @click="editDivision(scope.row.id)"
         >Edit</el-button
       >
       <el-button type="primary" link :icon="Delete" @click="openDeleteConfirm(scope.row.id)"
@@ -27,7 +27,7 @@
 
     <template #pagination>
       <Pagination
-        :pagination-meta="paginationDivisionList"
+        :pagination-meta="divisionListPagination"
         :handle-size-change="setSize"
         :handle-current-change="setPage"
       />
@@ -72,23 +72,21 @@ import { ElTag, ElText } from 'element-plus'
 import { CirclePlus, Delete, Download, EditPen } from '@element-plus/icons-vue'
 
 // Types
-import type { ColumnProps } from '@/components/DataTable/types'
+import type { ColumnProps } from '@/components/data-table/types'
 import type { DivisionList } from '@/modules/division/division.types'
 
 // Internal modules
-import DataTable from '@/components/DataTable/index.vue'
-import Pagination from '@/components/Pagination/index.vue'
-import Drawer from '@/components/Drawer/index.vue'
-import DivisionAddContainer from './divisionAddContainer.vue'
-import DivisionEditContainer from '@/views/organization/division-management/components/divisionEditContainer.vue'
-import { useDdl } from '@/modules/ddl/ddl.hook.ts'
+import DataTable from '@/components/data-table/index.vue'
+import Pagination from '@/components/pagination/index.vue'
+import Drawer from '@/components/drawer/index.vue'
+import DivisionAddContainer from '@/views/organization/division-management/components/division-add-container.vue'
+import DivisionEditContainer from '@/views/organization/division-management/components/division-edit-container.vue'
 import { useDivision } from '@/modules/division/division.hook.ts'
 
 // Hooks
-const { generalStatus } = useDdl()
 const {
   divisionList,
-  paginationDivisionList,
+  divisionListPagination,
   getDivisionList,
   deleteDivision,
   deleteBatchDivision,
@@ -107,15 +105,15 @@ const selectedIds = ref<number[]>([])
 
 const addDivision = () => {
   drawerRef.value?.openDrawer({
-    title: 'Add Employee',
+    title: 'Add Division',
     component: DivisionAddContainer,
     props: {}
   })
 }
 
-const editEmployee = (id: number) => {
+const editDivision = (id: number) => {
   drawerRef.value?.openDrawer({
-    title: 'Edit Employee',
+    title: 'Edit Division',
     component: DivisionEditContainer,
     props: { id }
   })
@@ -160,7 +158,6 @@ const columns = reactive<ColumnProps<DivisionList>[]>([
   {
     prop: 'is_active',
     label: 'Status',
-    options: generalStatus.value,
     width: 240,
     render: scope => {
       const isActive = scope.row.is_active

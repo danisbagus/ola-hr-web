@@ -74,7 +74,7 @@ import Pagination from './components/Pagination.vue'
 import TableColumn from './components/TableColumn.vue'
 import { handleProp } from '@/utils'
 
-import type { BreakPoint } from '@/components/Grid/interface'
+import type { BreakPoint } from '@/components/grid/types'
 import type { ColumnProps, TypeProps } from '@/components/DynamicTable/interface'
 import type { ListComposable } from '@/shared/types/hook'
 import { useSelection } from '@/shared/hooks/selection.hook'

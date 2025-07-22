@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { ref, computed, toRaw } from 'vue'
-import Form from '@/views/organization/division-management/components/divisionForm.vue'
+import Form from '@/views/organization/division-management/components/division-form.vue'
 import { useDivision } from '@/modules/division/division.hook'
 import { isEmptyValue } from '@/shared/utils/checker/index'
 

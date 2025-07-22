@@ -34,15 +34,15 @@
 import { ref, watch, nextTick } from 'vue'
 import { cloneDeep, isEqual } from 'lodash-es'
 import type { ReqDivision } from '@/modules/division/division.types'
-import Form from '@/views/organization/division-management/components/divisionForm.vue'
+import Form from '@/views/organization/division-management/components/division-form.vue'
 import { useDivision } from '@/modules/division/division.hook'
 
 const {
-  divisionDetail,
   getDivisionList,
   getDivisionDetail,
   updateDivision,
   resetDivisionDetail,
+  divisionDetail,
   divisionForm,
   isLoadingGetDetail,
   isSuccessGetDetail,

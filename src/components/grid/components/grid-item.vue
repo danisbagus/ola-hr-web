@@ -8,7 +8,7 @@
 
 <script setup lang="ts" name="GridItem">
 import { computed, inject, type Ref, ref, useAttrs, watch } from 'vue'
-import { type BreakPoint, type Responsive } from '../interface/index'
+import { type BreakPoint, type Responsive } from '../types/index'
 
 // ================================
 // PROPS

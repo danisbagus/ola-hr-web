@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { useSlots } from 'vue'
-import type { ColumnProps } from '@/components/DynamicTable/interface'
+import type { ColumnProps } from '@/components/data-table/types'
 // Utilitas bantu untuk format nilai dan handle prop bertingkat
 import { formatValue, handleProp, handleRowAccordingToProp } from '@/utils'
 

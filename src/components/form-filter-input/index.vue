@@ -37,10 +37,10 @@ interface FormFilterInput {
   clearable?: boolean
   placeholder?: string
   tooltip?: string
+  loading?: boolean
 }
 
 const props = defineProps<FormFilterInput>()
-const { filterType, label, options, placeholder, tooltip, clearable, props: rawProps = {} } = props
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -56,8 +56,8 @@ const typeMap: Record<string, string> = {
 }
 
 const optionItems = computed(() => {
-  if (!options) return []
-  return options
+  if (!props.options) return []
+  return props.options
     .filter(
       ({ value, label, disabled }) =>
         value !== undefined &&
@@ -71,8 +71,10 @@ const optionItems = computed(() => {
 })
 
 const inputProps = computed(() => ({
-  ...rawProps,
-  clearable,
-  placeholder: placeholder ?? (filterType.includes('input') ? 'Please Enter' : 'Please Select')
+  ...props.props,
+  clearable: props.clearable,
+  loading: props.loading,
+  placeholder:
+    props.placeholder ?? (props.filterType.includes('input') ? 'Please Enter' : 'Please Select')
 }))
 </script>

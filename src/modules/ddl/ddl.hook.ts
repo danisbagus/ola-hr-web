@@ -1,4 +1,5 @@
 import { computed, reactive, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useDdlStore } from '@/modules/ddl/ddl.store'
 import { getDivisionDdlApi, getRoleDdlApi } from '@/modules/ddl/ddl.service'
 import { transformToOptionItem } from '@/modules/ddl/ddl.transformer'
@@ -7,6 +8,8 @@ import type { ReqDdlParams } from '@/modules/ddl/ddl.types'
 
 export function useDdl() {
   const ddlStore = useDdlStore()
+
+  const { divisionDdl, roleDdl, genders, generalStatus, employmentStatus } = storeToRefs(ddlStore)
 
   const ddlDivisonParams = reactive<ReqDdlParams>({
     page: 1,
@@ -50,13 +53,13 @@ export function useDdl() {
   }
 
   return {
-    divisionDdl: computed(() => ddlStore.divisionDdl),
-    roleDdl: computed(() => ddlStore.roleDdl),
-    genders: computed(() => ddlStore.genders),
-    generalStatus: computed(() => ddlStore.generalStatus),
-    employmentStatus: computed(() => ddlStore.EmploymentStatus),
     getDivisionDdl,
     getRoleDdl,
+    divisionDdl,
+    roleDdl,
+    genders,
+    generalStatus,
+    employmentStatus,
     isLoadingDivision,
     isLoadingRole
   }

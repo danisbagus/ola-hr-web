@@ -1,6 +1,6 @@
 // import { VNode, ComponentPublicInstance, Ref } from "vue";
 import type { VNode, Ref } from 'vue'
-import type { BreakPoint, Responsive } from '@/components/Grid/interface'
+import type { BreakPoint, Responsive } from '@/components/grid/types'
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
 
 export interface EnumProps {

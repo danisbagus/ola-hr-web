@@ -10,7 +10,7 @@ export const useDivisionStore = defineStore('ola-hr-division', {
   state: (): DivisionState => ({
     divisionList: [],
     divisionDetail: null,
-    paginationDivisionList: {
+    divisionListPagination: {
       page: 1,
       size: 10,
       total_data: 0,
@@ -18,7 +18,7 @@ export const useDivisionStore = defineStore('ola-hr-division', {
     },
     divisionListParams: {
       keyword: '',
-      is_active: 1,
+      is_active: null,
       page: 1,
       size: 10
     }
@@ -34,14 +34,14 @@ export const useDivisionStore = defineStore('ola-hr-division', {
       this.divisionDetail = data
     },
 
-    setPaginationDivisionList(data: ResPaginationMeta) {
-      this.paginationDivisionList = data
+    setDivisionPagination(data: ResPaginationMeta) {
+      this.divisionListPagination = data
     },
 
     resetListParams() {
       this.divisionListParams = {
         keyword: '',
-        is_active: 1,
+        is_active: null,
         page: 1,
         size: 10
       }

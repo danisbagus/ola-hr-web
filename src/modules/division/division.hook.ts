@@ -15,7 +15,8 @@ import { useNotify } from '@/shared/hooks/notify.hook'
 
 export function useDivision() {
   const divisionStore = useDivisionStore()
-  const { divisionDetail } = storeToRefs(divisionStore)
+  const { divisionList, divisionDetail, divisionListParams, divisionListPagination } =
+    storeToRefs(divisionStore)
 
   const { notifyError, notifySuccess } = useNotify()
 
@@ -37,7 +38,7 @@ export function useDivision() {
     try {
       const { data } = await getDivisionListApi({ ...divisionStore.divisionListParams })
       divisionStore.setDivisionList(data.divisions)
-      divisionStore.setPaginationDivisionList(data.pagination)
+      divisionStore.setDivisionPagination(data.pagination)
     } catch (error) {
       notifyError('Failed to get divisions', getErrorMessage(error))
     }
@@ -149,9 +150,9 @@ export function useDivision() {
     setSize,
 
     // states
-    divisionList: computed(() => divisionStore.divisionList),
-    divisionListParams: computed(() => divisionStore.divisionListParams),
-    paginationDivisionList: computed(() => divisionStore.paginationDivisionList),
+    divisionList,
+    divisionListParams,
+    divisionListPagination,
     divisionDetail,
     divisionForm,
     isLoadingGetDetail,

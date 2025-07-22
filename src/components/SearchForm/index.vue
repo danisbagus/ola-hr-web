@@ -51,11 +51,11 @@
 
 <script setup lang="ts" name="SearchForm">
 import type { ColumnProps } from '@/components/DynamicTable/interface'
-import type { BreakPoint } from '@/components/Grid/interface'
+import type { BreakPoint } from '@/components/grid/types'
 import { Delete, Search } from '@element-plus/icons-vue'
 import SearchFormItem from './components/SearchFormItem.vue'
-import Grid from '@/components/Grid/index.vue'
-import GridItem from '@/components/Grid/components/GridItem.vue'
+import Grid from '@/components/grid/index.vue'
+import GridItem from '@/components/grid/components/grid-item.vue'
 
 // Interface properti yang bisa diterima komponen
 interface TableProps {
