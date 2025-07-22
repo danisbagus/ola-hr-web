@@ -4,11 +4,14 @@
       <el-button v-auth="'add'" type="primary" :icon="CirclePlus" @click="addDivision"
         >Add</el-button
       >
-      <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain disabled
-        >Batch Add</el-button
-      >
       <el-button v-auth="'export'" type="primary" :icon="Download" plain disabled>Export</el-button>
-      <el-button type="danger" :icon="Delete" plain :disabled="!scope.isSelected">
+      <el-button
+        type="danger"
+        :icon="Delete"
+        plain
+        :disabled="!scope.isSelected"
+        @click="openDeleteBatchConfirm(scope.selectedListIds)"
+      >
         Batch Delete
       </el-button>
     </template>
@@ -17,7 +20,9 @@
       <el-button type="primary" link :icon="EditPen" @click="editEmployee(scope.row.id)"
         >Edit</el-button
       >
-      <el-button type="primary" link :icon="Delete">Delete</el-button>
+      <el-button type="primary" link :icon="Delete" @click="openDeleteConfirm(scope.row.id)"
+        >Delete</el-button
+      >
     </template>
 
     <template #pagination>
@@ -30,6 +35,32 @@
   </DataTable>
 
   <Drawer ref="drawerRef" />
+
+  <el-dialog
+    v-model="deleteConfirmVisible"
+    title="Delete Confirmation"
+    width="30%"
+    @close="deleteConfirmVisible = false"
+  >
+    <span>Are you sure you want to delete this division?</span>
+    <template #footer>
+      <el-button @click="deleteConfirmVisible = false">No</el-button>
+      <el-button type="danger" @click="handleDelete">Yes, Delete</el-button>
+    </template>
+  </el-dialog>
+
+  <el-dialog
+    v-model="deleteBatchConfirmVisible"
+    title="Delete Batch Confirmation"
+    width="30%"
+    @close="deleteBatchConfirmVisible = false"
+  >
+    <span>Are you sure you want to batch delete division?</span>
+    <template #footer>
+      <el-button @click="deleteBatchConfirmVisible = false">No</el-button>
+      <el-button type="danger" @click="handleDeleteBatch">Yes, Delete</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -38,7 +69,7 @@ import { ref, reactive, h, onMounted } from 'vue'
 
 // Third-party UI & icon libraries
 import { ElTag, ElText } from 'element-plus'
-import { CirclePlus, Delete, Download, EditPen, Upload } from '@element-plus/icons-vue'
+import { CirclePlus, Delete, Download, EditPen } from '@element-plus/icons-vue'
 
 // Types
 import type { ColumnProps } from '@/components/DataTable/types'
@@ -55,9 +86,24 @@ import { useDivision } from '@/modules/division/division.hook.ts'
 
 // Hooks
 const { generalStatus } = useDdl()
-const { divisionList, paginationDivisionList, getDivisionList, setPage, setSize } = useDivision()
+const {
+  divisionList,
+  paginationDivisionList,
+  getDivisionList,
+  deleteDivision,
+  deleteBatchDivision,
+  setPage,
+  setSize,
+  isSuccessDelete,
+  isSuccessDeleteBatch
+} = useDivision()
 
 const drawerRef = ref<InstanceType<typeof Drawer> | null>(null)
+
+const deleteConfirmVisible = ref(false)
+const deleteBatchConfirmVisible = ref(false)
+const selectedId = ref(0)
+const selectedIds = ref<number[]>([])
 
 const addDivision = () => {
   drawerRef.value?.openDrawer({
@@ -73,6 +119,32 @@ const editEmployee = (id: number) => {
     component: DivisionEditContainer,
     props: { id }
   })
+}
+
+const openDeleteConfirm = (id: number) => {
+  deleteConfirmVisible.value = true
+  selectedId.value = id
+}
+
+const handleDelete = async () => {
+  await deleteDivision(selectedId.value)
+  if (isSuccessDelete.value) {
+    deleteConfirmVisible.value = false
+    await getDivisionList()
+  }
+}
+
+const openDeleteBatchConfirm = (ids: number[]) => {
+  deleteBatchConfirmVisible.value = true
+  selectedIds.value = ids
+}
+
+const handleDeleteBatch = async () => {
+  await deleteBatchDivision(selectedIds.value)
+  if (isSuccessDeleteBatch.value) {
+    deleteBatchConfirmVisible.value = false
+    await getDivisionList()
+  }
 }
 
 const columns = reactive<ColumnProps<DivisionList>[]>([

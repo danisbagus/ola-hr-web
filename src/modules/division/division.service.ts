@@ -21,3 +21,11 @@ export const updateDivisionApi = (id: number, params: ReqDivision) => {
 export const createDivisionApi = (params: ReqDivision) => {
   return http.post<null>('/api/divisions', params)
 }
+
+export const deleteDivisionApi = (id: number) => {
+  return http.delete<null>(`/api/divisions/${id}`)
+}
+
+export const deleteBatchDivisionApi = (ids: number[]) => {
+  return http.post<null>(`/api/divisions/delete-batch`, { ids })
+}

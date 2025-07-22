@@ -5,9 +5,6 @@
         <el-button v-auth="'add'" type="primary" :icon="CirclePlus" @click="addEmployee"
           >Add</el-button
         >
-        <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain disabled
-          >Batch Add</el-button
-        >
         <el-button v-auth="'export'" type="primary" :icon="Download" plain disabled
           >Export</el-button
         >

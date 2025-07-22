@@ -7,7 +7,9 @@ import {
   getDivisionListApi,
   getDivisionDetailApi,
   createDivisionApi,
-  updateDivisionApi
+  updateDivisionApi,
+  deleteDivisionApi,
+  deleteBatchDivisionApi
 } from '@/modules/division/division.service'
 import { useNotify } from '@/shared/hooks/notify.hook'
 
@@ -21,6 +23,8 @@ export function useDivision() {
   const isSuccessGetDetail = ref(false)
   const isSuccessCreate = ref(false)
   const isSuccessUpdate = ref(false)
+  const isSuccessDelete = ref(false)
+  const isSuccessDeleteBatch = ref(false)
 
   const defaultForm: ReqDivision = {
     name: '',
@@ -78,6 +82,28 @@ export function useDivision() {
     }
   }
 
+  const deleteDivision = async (id: number) => {
+    isSuccessDelete.value = false
+    try {
+      await deleteDivisionApi(id)
+      isSuccessDelete.value = true
+      notifySuccess('Successfully delete division')
+    } catch (error) {
+      notifyError('Failed to delete division', getErrorMessage(error))
+    }
+  }
+
+  const deleteBatchDivision = async (ids: number[]) => {
+    isSuccessDeleteBatch.value = false
+    try {
+      await deleteBatchDivisionApi(ids)
+      isSuccessDeleteBatch.value = true
+      notifySuccess('Successfully delete divisions')
+    } catch (error) {
+      notifyError('Failed to delete divisions', getErrorMessage(error))
+    }
+  }
+
   const resetListParams = () => {
     divisionStore.resetListParams()
     getDivisionList()
@@ -115,6 +141,8 @@ export function useDivision() {
     getDivisionDetail,
     createDivision,
     updateDivision,
+    deleteDivision,
+    deleteBatchDivision,
     resetListParams,
     resetDivisionDetail,
     setPage,
@@ -129,6 +157,8 @@ export function useDivision() {
     isLoadingGetDetail,
     isSuccessGetDetail,
     isSuccessCreate,
-    isSuccessUpdate
+    isSuccessUpdate,
+    isSuccessDelete,
+    isSuccessDeleteBatch
   }
 }
