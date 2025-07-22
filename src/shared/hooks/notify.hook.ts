@@ -1,7 +1,7 @@
 import { ElNotification } from 'element-plus'
 
 export function useNotify() {
-  const notifyError = (msg: string, title = 'Error') => {
+  const notifyError = (title: string, msg: string = '') => {
     ElNotification({
       title,
       message: msg,
@@ -9,7 +9,7 @@ export function useNotify() {
     })
   }
 
-  const notifySuccess = (msg: string, title = 'Success') => {
+  const notifySuccess = (title: string, msg: string = '') => {
     ElNotification({
       title,
       message: msg,

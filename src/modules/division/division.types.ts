@@ -13,6 +13,12 @@ export interface ReqDivisionList {
   page: number
   size: number
 }
+
+export interface ReqDivision {
+  name: string
+  is_active: boolean
+}
+
 export interface DivisionList {
   id: number
   name: string

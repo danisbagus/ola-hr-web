@@ -11,8 +11,10 @@
       </el-button>
     </template>
 
-    <template #operation>
-      <el-button type="primary" link :icon="EditPen">Edit</el-button>
+    <template #operation="scope">
+      <el-button type="primary" link :icon="EditPen" @click="editEmployee(scope.row.id)"
+        >Edit</el-button
+      >
       <el-button type="primary" link :icon="Delete">Delete</el-button>
     </template>
 
@@ -25,12 +27,12 @@
     </template>
   </DataTable>
 
-  <!-- <Drawer ref="drawerRef" /> -->
+  <Drawer ref="drawerRef" />
 </template>
 
 <script setup lang="ts">
 // Vue built-in
-import { reactive, h, onMounted } from 'vue'
+import { ref, reactive, h, onMounted } from 'vue'
 
 // Third-party UI & icon libraries
 import { ElTag, ElText } from 'element-plus'
@@ -43,12 +45,24 @@ import type { DivisionList } from '@/modules/division/division.types'
 // Internal modules
 import DataTable from '@/components/DataTable/index.vue'
 import Pagination from '@/components/Pagination/index.vue'
+import Drawer from '@/components/Drawer/index.vue'
+import DivisionEditContainer from '@/views/organization/division-management/components/divisionEditContainer.vue'
 import { useDdl } from '@/modules/ddl/ddl.hook.ts'
 import { useDivision } from '@/modules/division/division.hook.ts'
 
 // Hooks
 const { generalStatus } = useDdl()
 const { divisionList, paginationDivisionList, getDivisionList, setPage, setSize } = useDivision()
+
+const drawerRef = ref<InstanceType<typeof Drawer> | null>(null)
+
+const editEmployee = (id: number) => {
+  drawerRef.value?.openDrawer({
+    title: 'Edit Employee',
+    component: DivisionEditContainer,
+    props: { id }
+  })
+}
 
 const columns = reactive<ColumnProps<DivisionList>[]>([
   { type: 'selection', fixed: 'left', width: 50 },
