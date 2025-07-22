@@ -16,10 +16,10 @@ import type { ResultData, CustomAxiosRequestConfig } from '@/shared/types/api'
 import { ResultEnum } from '@/shared/enums/http'
 
 // Import fungsi utilitas untuk menangani status error
-import { checkStatus } from '@/lib/http/utils/checkStatus'
+import { checkStatus } from '@/lib/http/utils/check-status'
 
 // Import class untuk membatalkan request yang sama
-import { AxiosCanceler } from '@/lib/http/utils/axiosCancel'
+import { AxiosCanceler } from '@/lib/http/utils/axios-cancel'
 
 // Import router untuk redirect
 import router from '@/router'

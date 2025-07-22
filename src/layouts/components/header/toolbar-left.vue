@@ -11,10 +11,10 @@
 
 <script setup lang="ts">
 // Import komponen CollapseIcon (untuk toggle sidebar)
-import CollapseIcon from './components/CollapseIcon.vue'
+import CollapseIcon from './components/collapse-icon.vue'
 
 // Import komponen Breadcrumb (navigasi jalur halaman)
-import Breadcrumb from './components/Breadcrumb.vue'
+import Breadcrumb from './components/breadcrumb.vue'
 </script>
 
 <style scoped lang="scss">

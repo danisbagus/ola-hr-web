@@ -39,7 +39,7 @@ import { useGlobal } from '@/modules/global/global.hook'
 // import { useKeepAliveStore } from '@/stores/modules/keepAlive/keepAlive.store'
 
 // Import komponen Footer untuk digunakan di bagian layout bawah
-import Footer from '@/layouts/components/Footer/index.vue'
+import Footer from '@/layouts/components/footer/index.vue'
 
 // Ambil state reactive dari global store
 const { isCollapse, toggleCollapseWithParam } = useGlobal()

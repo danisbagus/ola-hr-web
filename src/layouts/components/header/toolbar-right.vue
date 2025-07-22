@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 // import Message from './components/Message.vue'
-import Avatar from './components/Avatar.vue'
+import Avatar from './components/avatar.vue'
 import { useUser } from '@/modules/user/user.hook'
 
 const { userInfo } = useUser()

@@ -67,10 +67,10 @@ import { useGlobal } from '@/modules/global/global.hook'
 import { useAuth } from '@/modules/auth/auth.hook'
 
 // layout components
-import ToolBarLeft from '@/layouts/components/Header/ToolBarLeft.vue'
-import ToolBarRight from '@/layouts/components/Header/ToolBarRight.vue'
-import SubMenu from '@/layouts/components/Menu/SubMenu.vue'
-import Main from '@/layouts/components/Main/index.vue'
+import ToolBarLeft from '@/layouts/components/header/toolbar-left.vue'
+import ToolBarRight from '@/layouts/components/header/toolbar-right.vue'
+import SubMenu from '@/layouts/components/menu/sub-menu.vue'
+import Main from '@/layouts/components/main/index.vue'
 
 // environment variable
 const title = import.meta.env.VITE_GLOB_APP_TITLE

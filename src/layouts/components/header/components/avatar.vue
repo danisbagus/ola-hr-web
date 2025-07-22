@@ -44,8 +44,8 @@ import { LOGIN_URL } from '@/config'
 import { useRouter } from 'vue-router'
 import { useUser } from '@/modules/user/user.hook'
 import { ElNotification } from 'element-plus'
-import UserInfoDialog from './UserInfoDialog.vue'
-import PasswordDialog from './PasswordDialog.vue'
+import UserInfoDialog from './user-info-dialog.vue'
+import PasswordDialog from './password-dialog.vue'
 
 const router = useRouter()
 

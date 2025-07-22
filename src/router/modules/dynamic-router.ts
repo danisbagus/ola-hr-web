@@ -48,6 +48,7 @@ export const initDynamicRouter = async () => {
     }
 
     // 3. Iterasi dan tambahkan routing dinamis berdasarkan data dari backend
+    console.log('flatMenuList', flatMenuList.value)
     flatMenuList.value.forEach(item => {
       // Hapus properti children jika ada (untuk menghindari nested routing)
       item.children && delete item.children

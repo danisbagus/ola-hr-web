@@ -106,7 +106,7 @@ import type { ElForm } from 'element-plus'
 import { CircleClose, UserFilled } from '@element-plus/icons-vue'
 
 // Fungsi untuk menambahkan router dinamis
-import { initDynamicRouter } from '@/router/modules/dynamicRouter'
+import { initDynamicRouter } from '@/router/modules/dynamic-router'
 
 // Konstanta URL home
 import { HOME_URL } from '@/config'

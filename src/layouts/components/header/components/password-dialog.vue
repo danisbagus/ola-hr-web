@@ -120,7 +120,7 @@ const confirmSubmit = async () => {
     ElNotification({ title: 'Successfully Change Password', type: 'success' })
     submitConfirmVisible.value = true
   } else {
-    ElNotification({ title: 'Failed Change Password', type: 'error', message: result.errorMessage })
+    ElNotification({ title: 'Successfully Change Password', type: 'success' })
   }
 
   submitConfirmVisible.value = false

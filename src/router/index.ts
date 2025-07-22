@@ -1,10 +1,10 @@
 // Import Modul & Dependency
 import { createRouter, createWebHashHistory } from 'vue-router' // Vue Router untuk routing berbasis hash
-import { staticRouter, errorRouter } from '@/router/modules/staticRouter' // Import route statis & route error
+import { staticRouter, errorRouter } from '@/router/modules/static-router' // Import route statis & route error
 import { useAuth } from '@/modules/auth/auth.hook'
 import { useUser } from '@/modules/user/user.hook'
 import { LOGIN_URL, ROUTER_WHITE_LIST } from '@/config' // Konstanta konfigurasi URL login dan whitelist route
-import { initDynamicRouter } from '@/router/modules/dynamicRouter' // Fungsi inisialisasi dynamic route
+import { initDynamicRouter } from '@/router/modules/dynamic-router' // Fungsi inisialisasi dynamic route
 
 // Fungsi untuk menentukan mode router (hash atau history)
 const routerMode = () => createWebHashHistory() // Menggunakan hash mode untuk histori browser
