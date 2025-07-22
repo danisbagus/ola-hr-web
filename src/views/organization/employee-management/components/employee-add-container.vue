@@ -7,7 +7,6 @@
     mode="add"
   />
 
-  <!-- Cancel Confirmation Dialog -->
   <el-dialog
     v-model="cancelConfirmVisible"
     title="Discard changes?"
@@ -24,18 +23,12 @@
 
 <script setup lang="ts">
 import { ref, computed, toRaw } from 'vue'
-import Form from './Form.vue'
-import { ElNotification } from 'element-plus'
+import Form from '@/views/organization/employee-management/components/employee-form.vue'
 import { useEmployee } from '@/modules/employee/employee.hook'
-import { useEmployeeList } from '@/modules/employee/employeeList.hook'
 import { isEmptyValue } from '@/shared/utils/checker/index'
 
-const { createEmployee, employeeForm, isCreateEmployeeSuccess, createEmployeeErrorMessage } =
-  useEmployee()
+const { getEmployeeList, createEmployee, employeeForm, isSuccessCreate } = useEmployee()
 
-const { fetchList } = useEmployeeList()
-
-const props = defineProps<{ id: number }>()
 const emit = defineEmits(['close'])
 
 const cancelConfirmVisible = ref(false)
@@ -57,22 +50,13 @@ const confirmCancel = () => {
   emit('close')
 }
 
-const handleSubmit = async (data: any) => {
+const handleSubmit = async () => {
   await createEmployee()
-  if (!isCreateEmployeeSuccess.value) {
-    ElNotification({
-      title: 'Failed Add New Employee',
-      type: 'error',
-      message: createEmployeeErrorMessage.value
-    })
+  if (isSuccessCreate.value) {
+    emit('close')
 
-    return
+    await getEmployeeList()
   }
-
-  ElNotification({ title: 'Successfully Add New Employee', type: 'success' })
-  emit('close')
-
-  await fetchList()
 }
 </script>
 

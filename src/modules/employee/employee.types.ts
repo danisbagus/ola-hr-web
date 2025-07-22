@@ -3,16 +3,17 @@ import type { ResPaginationMeta } from '@/shared/types/pagination'
 export interface EmployeeState {
   employeeList: EmployeeList[]
   employeeDetail: ResEmployeeDetail | null
-  paginationEmployeeList: ResPaginationMeta
+  employeeListPagination: ResPaginationMeta
+  employeeListParams: ReqEmployeeList
 }
 
 export interface ReqEmployeeList {
-  keyword?: string
-  division_id?: number
-  role_id?: number
-  is_active?: boolean
-  page?: number
-  size?: number
+  keyword: string
+  division_id: number | null
+  role_id: number | null
+  is_active: boolean | null
+  page: number
+  size: number
 }
 export interface EmployeeList {
   id: number

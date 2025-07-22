@@ -1,7 +1,8 @@
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useEmployeeStore } from '@/modules/employee/employee.store'
 import {
+  getEmployeeListApi,
   getEmployeeDetailApi,
   updateEmployeeApi,
   createEmployeeApi,
@@ -10,10 +11,14 @@ import {
 } from '@/modules/employee/employee.service'
 import { getErrorMessage } from '@/shared/utils/http/getErrorMessage'
 import type { ReqEmployee, ResEmployeeDetail } from '@/modules/employee/employee.types'
+import { useNotify } from '@/shared/hooks/notify.hook'
 
 export function useEmployee() {
   const employeeStore = useEmployeeStore()
-  const { employeeDetail } = storeToRefs(employeeStore)
+  const { employeeList, employeeDetail, employeeListParams, employeeListPagination } =
+    storeToRefs(employeeStore)
+
+  const { notifyError, notifySuccess } = useNotify()
 
   // State
   const defaultForm: ReqEmployee = {
@@ -32,111 +37,102 @@ export function useEmployee() {
 
   const employeeForm = reactive<ReqEmployee>({ ...defaultForm })
 
-  const isLoadingGetEmployeeDetail = ref(false)
-  const isGetEmployeeDetailSuccess = ref(false)
-  const getEmployeeDetailErrorMessage = ref('')
-
-  const isLoadingUpdateEmployee = ref(false)
-  const isUpdateEmployeeSuccess = ref(false)
-  const updateEmployeeErrorMessage = ref('')
-
-  const isLoadingCreateEmployee = ref(false)
-  const isCreateEmployeeSuccess = ref(false)
-  const createEmployeeErrorMessage = ref('')
-
-  const isLoadingDeleteEmployee = ref(false)
-  const isDeleteEmployeeSuccess = ref(false)
-  const deleteEmployeeErrorMessage = ref('')
-
-  const isLoadingDeleteBatchEmployee = ref(false)
-  const isDeleteBatchEmployeeSuccess = ref(false)
-  const deleteBatchEmployeeErrorMessage = ref('')
+  const isLoadingGetDetail = ref(false)
+  const isSuccessGetDetail = ref(false)
+  const isSuccessCreate = ref(false)
+  const isSuccessUpdate = ref(false)
+  const isSuccessDelete = ref(false)
+  const isSuccessDeleteBatch = ref(false)
 
   // Actions
+  const getEmployeeList = async () => {
+    try {
+      const { data } = await getEmployeeListApi({ ...employeeStore.employeeListParams })
+      employeeStore.setEmployeeList(data.employees)
+      employeeStore.setemployeeListPagination(data.pagination)
+    } catch (error) {
+      notifyError('Failed to get divisions', getErrorMessage(error))
+    }
+  }
   const getEmployeeDetail = async (id: number) => {
-    isLoadingGetEmployeeDetail.value = true
-    isGetEmployeeDetailSuccess.value = false
-    getEmployeeDetailErrorMessage.value = ''
-
+    isLoadingGetDetail.value = true
+    isSuccessGetDetail.value = false
     employeeStore.setEmployeeDetail(null)
 
     try {
       const { data } = await getEmployeeDetailApi(id)
       employeeStore.setEmployeeDetail(data)
       setFormFromDetail(data)
-      isGetEmployeeDetailSuccess.value = true
+      isSuccessGetDetail.value = true
     } catch (error) {
-      getEmployeeDetailErrorMessage.value = getErrorMessage(error)
+      notifyError('Failed to get employee detail', getErrorMessage(error))
     } finally {
-      isLoadingGetEmployeeDetail.value = false
+      isLoadingGetDetail.value = false
     }
   }
 
   const updateEmployee = async (id: number) => {
-    isLoadingUpdateEmployee.value = true
-    isUpdateEmployeeSuccess.value = false
-    updateEmployeeErrorMessage.value = ''
-
+    isSuccessUpdate.value = false
     try {
       await updateEmployeeApi(id, { ...employeeForm })
-      isUpdateEmployeeSuccess.value = true
+      isSuccessUpdate.value = true
+      notifySuccess('Successfully update employee')
     } catch (error) {
-      updateEmployeeErrorMessage.value = getErrorMessage(error)
-    } finally {
-      isLoadingUpdateEmployee.value = false
+      notifyError('Failed to update employee', getErrorMessage(error))
     }
   }
 
   const createEmployee = async () => {
-    isLoadingCreateEmployee.value = true
-    isCreateEmployeeSuccess.value = false
-    createEmployeeErrorMessage.value = ''
+    isSuccessCreate.value = false
     try {
-      const { data } = await createEmployeeApi({ ...employeeForm })
-      isCreateEmployeeSuccess.value = true
-      return data
+      await createEmployeeApi({ ...employeeForm })
+      isSuccessCreate.value = true
+      notifySuccess('Successfully create employee')
     } catch (error) {
-      createEmployeeErrorMessage.value = getErrorMessage(error)
-    } finally {
-      isLoadingCreateEmployee.value = false
+      notifyError('Failed to create employee', getErrorMessage(error))
     }
   }
 
   const deleteEmployee = async (id: number) => {
-    isLoadingDeleteEmployee.value = true
-    isDeleteEmployeeSuccess.value = false
-    deleteEmployeeErrorMessage.value = ''
-
+    isSuccessDelete.value = false
     try {
       await deleteEmployeeApi(id)
-      isDeleteEmployeeSuccess.value = true
+      isSuccessDelete.value = true
+      notifySuccess('Successfully delete employee')
     } catch (error) {
-      deleteEmployeeErrorMessage.value = getErrorMessage(error)
-    } finally {
-      isLoadingDeleteEmployee.value = false
+      notifyError('Failed to delete employee', getErrorMessage(error))
     }
   }
 
   const deleteBatchEmployee = async (ids: number[]) => {
-    isLoadingDeleteBatchEmployee.value = true
-    isDeleteBatchEmployeeSuccess.value = false
-    deleteBatchEmployeeErrorMessage.value = ''
-
+    isSuccessDeleteBatch.value = false
     try {
       await deleteBatchEmployeeApi(ids)
-      isDeleteBatchEmployeeSuccess.value = true
+      isSuccessDeleteBatch.value = true
+      notifySuccess('Successfully delete employees')
     } catch (error) {
-      deleteBatchEmployeeErrorMessage.value = getErrorMessage(error)
-    } finally {
-      isLoadingDeleteBatchEmployee.value = false
+      notifyError('Failed to delete employees', getErrorMessage(error))
     }
+  }
+
+  const resetListParams = () => {
+    employeeStore.resetListParams()
+    getEmployeeList()
   }
 
   const resetEmployeeDetail = () => {
     employeeStore.setEmployeeDetail(null)
     resetUpdateForm()
-    isGetEmployeeDetailSuccess.value = false
-    getEmployeeDetailErrorMessage.value = ''
+  }
+
+  const setPage = (page: number) => {
+    employeeStore.setPage(page)
+    getEmployeeList()
+  }
+
+  const setSize = (size: number) => {
+    employeeStore.setSize(size)
+    getEmployeeList()
   }
 
   // Helpers
@@ -162,37 +158,29 @@ export function useEmployee() {
 
   // Expose to components
   return {
-    // Data
-    employeeDetail,
-    employeeForm,
-
     // Actions
+    getEmployeeList,
     getEmployeeDetail,
     updateEmployee,
     createEmployee,
     deleteEmployee,
     deleteBatchEmployee,
+    resetListParams,
     resetEmployeeDetail,
+    setPage,
+    setSize,
 
     // States
-    isLoadingGetEmployeeDetail,
-    isGetEmployeeDetailSuccess,
-    getEmployeeDetailErrorMessage,
-
-    isLoadingUpdateEmployee,
-    isUpdateEmployeeSuccess,
-    updateEmployeeErrorMessage,
-
-    isLoadingCreateEmployee,
-    isCreateEmployeeSuccess,
-    createEmployeeErrorMessage,
-
-    isLoadingDeleteEmployee,
-    isDeleteEmployeeSuccess,
-    deleteEmployeeErrorMessage,
-
-    isLoadingDeleteBatchEmployee,
-    isDeleteBatchEmployeeSuccess,
-    deleteBatchEmployeeErrorMessage
+    employeeList,
+    employeeListParams,
+    employeeListPagination,
+    employeeDetail,
+    employeeForm,
+    isLoadingGetDetail,
+    isSuccessGetDetail,
+    isSuccessCreate,
+    isSuccessUpdate,
+    isSuccessDelete,
+    isSuccessDeleteBatch
   }
 }

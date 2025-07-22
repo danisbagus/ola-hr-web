@@ -1,5 +1,5 @@
 <template>
-  <el-skeleton v-if="isLoadingGetEmployeeDetail || !employeeDetail" animated>
+  <el-skeleton v-if="isLoadingGetDetail || !employeeDetail" animated>
     <template #template>
       <div v-for="i in 11" :key="i" class="skeleton-form-item">
         <el-skeleton-item variant="text" class="skeleton-label" />
@@ -35,26 +35,21 @@
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
 import { cloneDeep, isEqual } from 'lodash-es'
-import Form from './Form.vue'
-import { ElNotification } from 'element-plus'
-import { useEmployee } from '@/modules/employee/employee.hook'
-import { useEmployeeList } from '@/modules/employee/employeeList.hook'
 import type { ReqEmployee } from '@/modules/employee/employee.types'
+import Form from './employee-form.vue'
+import { useEmployee } from '@/modules/employee/employee.hook'
 
 const {
-  employeeDetail,
+  getEmployeeList,
   getEmployeeDetail,
   updateEmployee,
   resetEmployeeDetail,
+  employeeDetail,
   employeeForm,
-  isLoadingGetEmployeeDetail,
-  isGetEmployeeDetailSuccess,
-  isUpdateEmployeeSuccess,
-  getEmployeeDetailErrorMessage,
-  updateEmployeeErrorMessage
+  isLoadingGetDetail,
+  isSuccessGetDetail,
+  isSuccessUpdate
 } = useEmployee()
-
-const { fetchList } = useEmployeeList()
 
 const props = defineProps<{ id: number }>()
 const emit = defineEmits(['close'])
@@ -84,21 +79,11 @@ const confirmCancel = () => {
 
 const handleSubmit = async (data: any) => {
   await updateEmployee(props.id)
-  if (!isUpdateEmployeeSuccess.value) {
-    ElNotification({
-      title: 'Failed Update Employee Data',
-      type: 'error',
-      message: updateEmployeeErrorMessage.value
-    })
-
-    return
+  if (isSuccessUpdate.value) {
+    resetEmployeeDetail()
+    emit('close')
+    await getEmployeeList()
   }
-
-  ElNotification({ title: 'Successfully Change Employee Data', type: 'success' })
-  resetEmployeeDetail()
-  emit('close')
-
-  await fetchList()
 }
 
 const handleGetEmployeeDetail = async (id: number) => {
@@ -107,17 +92,9 @@ const handleGetEmployeeDetail = async (id: number) => {
   await nextTick()
   await getEmployeeDetail(id)
 
-  if (!isGetEmployeeDetailSuccess.value) {
-    ElNotification({
-      title: 'Failed get employee data',
-      type: 'error',
-      message: getEmployeeDetailErrorMessage.value
-    })
-
-    return
+  if (isSuccessGetDetail.value) {
+    originalData.value = cloneDeep(employeeForm)
   }
-
-  originalData.value = cloneDeep(employeeForm)
 }
 
 watch(() => props.id, handleGetEmployeeDetail, { immediate: true })
