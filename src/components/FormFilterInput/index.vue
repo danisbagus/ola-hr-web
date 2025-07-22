@@ -25,7 +25,19 @@
 
 <script setup lang="ts" name="FormFilterInput">
 import { computed } from 'vue'
-import type { FormFilterInput } from '@/components/FormFilterInput/interface'
+import type { OptionItem } from '@/shared/types/enum'
+export type FilterType = 'input' | 'select'
+
+interface FormFilterInput {
+  filterType: FilterType
+  label: string
+  modelValue: string | number | boolean | object | any[] | null
+  options?: OptionItem[]
+  props?: any
+  clearable?: boolean
+  placeholder?: string
+  tooltip?: string
+}
 
 const props = defineProps<FormFilterInput>()
 const { filterType, label, options, placeholder, tooltip, clearable, props: rawProps = {} } = props
