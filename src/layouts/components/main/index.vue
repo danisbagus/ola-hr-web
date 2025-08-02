@@ -63,7 +63,7 @@ provide('refresh', refreshCurrentPage)
 const wrapperMap = new Map()
 
 // Fungsi pembungkus komponen agar bisa disimpan dalam keep-alive berdasarkan route
-function createComponentWrapper(component, route) {
+function createComponentWrapper(component: any, route: any) {
   if (!component) return // Tidak lakukan apa-apa jika komponen tidak tersedia
 
   const wrapperName = route.fullPath // Gunakan path lengkap sebagai key

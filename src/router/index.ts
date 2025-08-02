@@ -1,7 +1,7 @@
 // Import Modul & Dependency
 import { createRouter, createWebHashHistory } from 'vue-router' // Vue Router untuk routing berbasis hash
 import { staticRouter, errorRouter } from '@/router/modules/static-router' // Import route statis & route error
-import { useAuth } from '@/modules/auth/auth.hook'
+import { useMenu } from '@/modules/menu/menu.hook'
 import { useUser } from '@/modules/user/user.hook'
 import { LOGIN_URL, ROUTER_WHITE_LIST } from '@/config' // Konstanta konfigurasi URL login dan whitelist route
 import { initDynamicRouter } from '@/router/modules/dynamic-router' // Fungsi inisialisasi dynamic route
@@ -38,7 +38,7 @@ const router = createRouter({
 // Middleware Routing: beforeEach
 // beforeEach: Guard untuk mencegah akses tanpa otorisasi.
 router.beforeEach(async (to, from, next) => {
-  const { authMenuList, setRouteName } = useAuth()
+  const { menuList, setRouteName } = useMenu()
   const { token } = useUser()
 
   // todo: add NProgress
@@ -61,7 +61,7 @@ router.beforeEach(async (to, from, next) => {
   if (!token) return next({ path: LOGIN_URL, replace: true })
 
   // 5️. Jika menu belum dimuat, inisialisasi dynamic route
-  if (!authMenuList.value.length) {
+  if (!menuList.value.length) {
     await initDynamicRouter() // Ambil daftar menu dan generate route dinamis
     return next({ ...to, replace: true }) // Replace agar tidak membuat riwayat baru
   }
@@ -75,7 +75,7 @@ router.beforeEach(async (to, from, next) => {
 
 // Fungsi Reset Router (hapus semua dynamic route)
 export const resetRouter = () => {
-  const { flatMenuList } = useAuth()
+  const { flatMenuList } = useMenu()
 
   flatMenuList.value.forEach(route => {
     // Iterasi semua route yang sudah ditambahkan

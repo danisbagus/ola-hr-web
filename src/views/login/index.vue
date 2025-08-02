@@ -111,12 +111,9 @@ import { initDynamicRouter } from '@/router/modules/dynamic-router'
 // Konstanta URL home
 import { HOME_URL } from '@/config'
 
-// Notifikasi UI
-import { ElNotification } from 'element-plus'
-
 // Hook untuk autentikasi
 import { useAuth } from '@/modules/auth/auth.hook'
-const { login: loginApi, loginForm, isLoadingLogin } = useAuth()
+const { login: loginApi, loginForm, isLoadingLogin, isSuccessLogin } = useAuth()
 
 import { useUser } from '@/modules/user/user.hook'
 const { getUserInfo } = useUser()
@@ -150,8 +147,8 @@ const login = (formEl: FormInstance | undefined) => {
   // Validasi form
   formEl.validate(async valid => {
     if (!valid) return
-    const result = await loginApi()
-    if (result.success) {
+    await loginApi()
+    if (isSuccessLogin) {
       // Inisialisasi routing dinamis berdasarkan hak akses
       await initDynamicRouter()
 
@@ -163,11 +160,6 @@ const login = (formEl: FormInstance | undefined) => {
 
       // Arahkan user ke halaman utama (HOME_URL)
       router.push(HOME_URL)
-
-      // Tampilkan notifikasi
-      ElNotification({ title: 'Successfully Logged In', type: 'success' })
-    } else {
-      ElNotification({ title: 'Failed Login', type: 'error', message: result.errorMessage })
     }
   })
 }

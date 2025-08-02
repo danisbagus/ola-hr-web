@@ -11,7 +11,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import { ElNotification } from 'element-plus'
 
 import { useUser } from '@/modules/user/user.hook'
-import { useAuth } from '@/modules/auth/auth.hook'
+import { useMenu } from '@/modules/menu/menu.hook'
 
 // Impor dinamis semua file .vue di dalam folder views
 const modules = import.meta.glob('@/views/**/*.vue')
@@ -20,16 +20,14 @@ const modules = import.meta.glob('@/views/**/*.vue')
 export const initDynamicRouter = async () => {
   // Inisialisasi store
   const { setToken } = useUser()
-  const { getAuthMenuList, authMenuList, flatMenuList } = useAuth()
+  const { getMenuList, menuList, flatMenuList } = useMenu()
 
   try {
     // 1. Ambil daftar menu dan tombol berdasarkan permission user
-    // await authStore.getAuthMenuList() // Ambil daftar menu yang diizinkan
-
-    await getAuthMenuList()
+    await getMenuList()
 
     // 2. Cek apakah user memiliki hak akses menu
-    if (!authMenuList.value.length) {
+    if (!menuList.value.length) {
       // Tampilkan notifikasi peringatan
       ElNotification({
         title: 'No Permission', // "Tidak Ada Akses"
@@ -48,29 +46,40 @@ export const initDynamicRouter = async () => {
     }
 
     // 3. Iterasi dan tambahkan routing dinamis berdasarkan data dari backend
-    console.log('flatMenuList', flatMenuList.value)
     flatMenuList.value.forEach(item => {
-      // Hapus properti children jika ada (untuk menghindari nested routing)
+      // Hapus children agar tidak nested (router.addRoute tidak butuh children)
       item.children && delete item.children
 
-      // Ubah string path component menjadi fungsi import menggunakan hasil dari import.meta.glob
-      if (item.component && typeof item.component == 'string') {
-        item.component = modules['/src/views' + item.component + '.vue']
+      // Tambahkan component jika tidak ada redirect
+      if (!item.redirect) {
+        const comp = resolveComponent(item.path)
+        if (comp) {
+          item.component = comp
+        } else {
+          console.warn(`Component not found for path: ${item.component}`)
+          return // skip jika component tidak ditemukan
+        }
+      } else {
+        return // skip jika tidak punya komponen
       }
 
-      // Tambahkan route ke router, apakah ke root atau ke dalam layout tergantung meta
-      if (item.meta.isFull) {
-        // Jika halaman penuh (misalnya login, error page)
+      // Tambahkan route, tergantung apakah layout penuh atau tidak
+      if (item.meta?.is_full) {
         router.addRoute(item as unknown as RouteRecordRaw)
       } else {
-        // Jika bagian dari layout utama
         router.addRoute('layout', item as unknown as RouteRecordRaw)
       }
     })
   } catch (error) {
-    // Tangani error saat mengambil data permission
     setToken('') // Reset token
     router.replace(LOGIN_URL) // Redirect ke login
     return Promise.reject(error) // Kembalikan error
   }
+}
+
+// Mengubah path ke fungsi import component secara otomatis.
+function resolveComponent(path: string) {
+  const viewPath1 = `/src/views${path}/index.vue`
+  const viewPath2 = `/src/views${path}.vue`
+  return modules[viewPath1] || modules[viewPath2] || null
 }

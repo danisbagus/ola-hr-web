@@ -64,7 +64,7 @@ import { useRoute } from 'vue-router'
 
 // stores / state management
 import { useGlobal } from '@/modules/global/global.hook'
-import { useAuth } from '@/modules/auth/auth.hook'
+import { useMenu } from '@/modules/menu/menu.hook'
 
 // layout components
 import ToolBarLeft from '@/layouts/components/header/toolbar-left.vue'
@@ -78,7 +78,7 @@ const title = import.meta.env.VITE_GLOB_APP_TITLE
 // reactive state
 const route = useRoute()
 
-const { showMenuList } = useAuth()
+const { showMenuList } = useMenu()
 const { isCollapse } = useGlobal()
 
 // computed

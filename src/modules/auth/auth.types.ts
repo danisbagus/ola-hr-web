@@ -1,7 +1,4 @@
-export interface AuthState {
-  routeName: string
-  authMenuList: Menu.MenuOptions[]
-}
+export interface AuthState {}
 
 export interface ReqLoginParams {
   password: string

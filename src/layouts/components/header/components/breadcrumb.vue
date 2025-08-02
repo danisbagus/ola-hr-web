@@ -43,13 +43,13 @@ import { useRoute, useRouter } from 'vue-router'
 // Import ikon separator dari Element Plus
 import { ArrowRight } from '@element-plus/icons-vue'
 
-import { useAuth } from '@/modules/auth/auth.hook'
+import { useMenu } from '@/modules/menu/menu.hook'
 
 // Inisialisasi hooks
 const route = useRoute()
 const router = useRouter()
 
-const { breadcrumbList: breadcrumbsGet } = useAuth()
+const { breadcrumbList: breadcrumbsGet } = useMenu()
 
 // Hitung daftar breadcrumb berdasarkan rute saat ini
 const breadcrumbList = computed(() => {
