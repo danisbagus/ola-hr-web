@@ -1,4 +1,4 @@
-import { computed, reactive, ref } from 'vue'
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMenuStore } from '@/modules/menu/menu.store'
 import { getMenuListApi } from '@/modules/menu/menu.service'
@@ -8,7 +8,7 @@ import { useNotify } from '@/shared/hooks/notify.hook'
 
 export const useMenu = () => {
   const menuStore = useMenuStore()
-  const { notifyError, notifySuccess } = useNotify()
+  const { notifyError } = useNotify()
 
   const { menuList } = storeToRefs(menuStore)
 

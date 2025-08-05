@@ -1,0 +1,50 @@
+<template>
+  <div class="card table-search">
+    <el-form ref="formRef" :model="roleListParams">
+      <Grid :gap="[30, 0]">
+        <GridItem>
+          <FormFilterInput
+            filterType="input"
+            label="Search"
+            placeholder="Please Enter Role Name"
+            v-model="roleListParams.keyword"
+            clearable
+          />
+        </GridItem>
+
+        <GridItem>
+          <FormFilterInput
+            filterType="select"
+            label="Status"
+            v-model="roleListParams.is_active"
+            :options="generalStatus"
+            clearable
+          />
+        </GridItem>
+
+        <GridItem suffix>
+          <div class="operation">
+            <el-button type="primary" :icon="Search" @click="getRoleList"> Search </el-button>
+            <el-button :icon="Delete" @click="resetListParams"> Reset </el-button>
+          </div>
+        </GridItem>
+      </Grid>
+    </el-form>
+  </div>
+</template>
+
+<script setup lang="ts">
+// Third-party UI
+import { Delete, Search } from '@element-plus/icons-vue'
+
+// Internal modules
+import Grid from '@/components/grid/index.vue'
+import GridItem from '@/components/grid/components/grid-item.vue'
+import FormFilterInput from '@/components/form-filter-input/index.vue'
+import { useRole } from '@/modules/role/role.hook'
+import { useDdl } from '@/modules/ddl/ddl.hook.ts'
+
+// Hooks
+const { getRoleList, resetListParams, roleListParams } = useRole()
+const { generalStatus } = useDdl()
+</script>
